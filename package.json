@@ -24,17 +24,20 @@
     "prettier": "^1.11.1"
   },
   "eslintConfig": {
-        "extends": ["airbnb-base", "prettier"],
-        "rules": {
-            "no-restricted-syntax": [
-                "error",
-                "ForInStatement",
-                "LabeledStatement",
-                "WithStatement"
-                ],
-            "no-underscore-dangle": [0]
-            },
-            "no-console": 0
-         },
-    "prettier": { "trailingComma": "all", "singleQuote": true }
+    "extends": ["airbnb-base", "prettier"],
+    "rules": {
+      "no-restricted-syntax": [
+        "error",
+        "ForInStatement",
+        "LabeledStatement",
+        "WithStatement"
+      ],
+      "no-underscore-dangle": [0],
+      "no-console": 0
+    }
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "singleQuote": true
+  }
 }
