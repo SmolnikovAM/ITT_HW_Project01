@@ -1,50 +1,42 @@
 # ITTalents Homework Project "01"
-HomeWork Project
 
+HomeWork Project
 
 ## HTML + folders
 
-
 pages:
 
-0. index.html - first load
-1. login
-2. register
-3. main page  - ÕŒ¬»Õ»
-4. all phones -  ÃŒ¡»ÀÕ» “≈À≈‘ŒÕ»
-5. show all about current phone - –≈¬ﬁ“¿
-6. about company - contacts - ¿¡ŒÕ»–¿… —≈
+0.  index.html - first load
+1.  login
+1.  register
+1.  main page - –ù–û–í–ò–ù–ò
+1.  all phones - –ú–û–ë–ò–õ–ù–ò –¢–ï–õ–ï–§–û–ù–ò
+1.  show all about current phone - –†–ï–í–Æ–¢–ê
+1.  about company - contacts - –ê–ë–û–ù–ò–†–ê–ô –°–ï
 
 folders:
+
 * css
 * data
 * img
 * html
 * js
 
-
-
 ## CSS
 
-
-1. header for all
-2. footer for all
-3. main page has links and photos to phones 
-
+1.  header for all
+2.  footer for all
+3.  main page has links and photos to phones
 
 ## Functionality
 
+1.  can register
+2.  can login
+3.  can login. after login in top can see username
+4.  article about phones store in JSON
+5.
 
-1. can register
-2. can login
-2. can login. after login in top can see username
-3. article about phones store in JSON
-4. 
+## Addition functionality
 
-
-## Addition functionality 
-
-
-1. can buy phone. new page for bucket
+1.  can buy phone. new page for bucket
 2.
-
