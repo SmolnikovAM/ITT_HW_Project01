@@ -7,19 +7,22 @@ HomeWork Project
 
 pages:
 
+0. index.html - first load
 1. login
 2. register
-3. main page
-4. all phones
-5. show all about current phone
-6. about company 
+3. main page  - ÍÎÂÈÍÈ
+4. all phones -  ÌÎÁÈËÍÈ ÒÅËÅÔÎÍÈ
+5. show all about current phone - ĞÅÂŞÒÀ
+6. about company - contacts - ÀÁÎÍÈĞÀÉ ÑÅ
 
 folders:
 * css
+* data
 * img
-* pages
+* html
 * js
-* index.html
+
+
 
 ## CSS
 
@@ -29,7 +32,7 @@ folders:
 3. main page has links and photos to phones 
 
 
-##Functionality
+## Functionality
 
 
 1. can register
@@ -39,7 +42,7 @@ folders:
 4. 
 
 
-##Addition functionality 
+## Addition functionality 
 
 
 1. can buy phone. new page for bucket
