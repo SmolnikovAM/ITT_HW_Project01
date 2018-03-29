@@ -1,6 +1,28 @@
 // single source of truth
 
-function value(obj, path) {}
+function value(inObj, inPath, sliceFirst = false, first = true) {
+  if (first) {
+    let newPath = inPath;
+    while (newPath.indexOf("'") >= 0 || newPath.indexOf('"') >= 0) {
+      newPath = newPath.replace("'", '');
+      newPath = newPath.replace('"', '');
+    }
+    newPath = newPath.split('.').reduce((a, b) => {
+      const bb = b.split('[').map(x => x.replace(']', ''));
+      return [...a, ...bb];
+    }, []);
+    if (sliceFirst) newPath = newPath.slice(1);
+    return value(inObj, newPath, false, false);
+  }
+  if (inPath.length === 0) return inObj;
+  if (!Reflect.has(inObj, inPath[0]))
+    throw new Error(`Parsing error ${inPath[0]}`);
+  return value(inObj[inPath[0]], inPath.slice(1), false, false);
+}
+
+// const a = { b: { c: 5, d: [{ l: [1, 2, 3] }, {}, {}, { p: 1 }, { z: 2 }] } };
+
+// console.log(value(a, 'b.d[0].l'));
 
 const STATE = {
   data: {
@@ -30,7 +52,7 @@ const STATE = {
       tmp.push(el);
 
       // console.log(el);
-      let matchVars = el.textContent.match(/{{[a-zA-Z0-9\s_]+}}/gi);
+      let matchVars = el.textContent.match(/{{[a-zA-Z0-9\.[\]\s_]+}}/gi);
       if (matchVars) {
         matchVars = matchVars.map(str =>
           str
@@ -40,10 +62,10 @@ const STATE = {
         );
         let { textContent } = el;
         matchVars.forEach(param => {
-          if (Reflect.has(data, param)) {
-            const r = new RegExp(`{{\\s*${param}\\s*}}`, 'g');
-            textContent = textContent.replace(r, data[param]);
-          }
+          // if (Reflect.has(data, param)) {
+          const r = new RegExp(`{{\\s*${param}\\s*}}`, 'g');
+          textContent = textContent.replace(r, value(data, param));
+          // }
         });
         el.textContent = textContent;
       }
@@ -51,10 +73,9 @@ const STATE = {
         Array.from(el.children).forEach(child => recChange(child, tmp));
       if (el.tagName === 'COMPONENT') {
         const dataChild = el.attributes.data
-          ? this.data[el.attributes.data.value]
+          ? value(this.data, el.attributes.data.value)
           : this.data;
         const page = el.attributes.page.value;
-        console.log(el.attributes);
 
         if (Reflect.has(el.attributes, 'foreach')) {
           Object.keys(dataChild).forEach(key => {
