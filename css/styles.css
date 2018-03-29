@@ -75,7 +75,8 @@ input {
 .container {
     display: flex;
     flex-direction: row;
-    height: 600px;
+    min-height: 600px;
+    height: auto;
 }
 
 .container > div {
