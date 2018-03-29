@@ -115,26 +115,39 @@ input {
     flex-wrap: wrap;
 }
 
+.articles img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 340px;
+    width: 340px;
+}
+
 .articles > div {
+    position: relative;
     flex-grow: 1;
     width: 50%;
     margin-bottom: 15px;
 }
 
-.hideContent {
-    overflow: hidden;
-    line-height: 18px;
-    height: 18px;
+.content {
+    position: absolute;
+    width: 83%;
+    margin: 0 20px 20px 20px;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .2s, visibility .2s;
 }
 
-.showContent{
-    height: auto;
+.articles > div:hover .content {
+    visibility: visible;
+    opacity: 1;
 }
 
-.show a {
-    padding: 2px;
-    line-height: 18px;
-    height: auto;
-    color: red;
-    text-decoration: underline;
+.content > a {
+    color : wheat;
+    text-align: center;
 }
