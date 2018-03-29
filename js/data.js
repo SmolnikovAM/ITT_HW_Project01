@@ -1,3 +1,11 @@
+const bannerList = [
+  { picture: 'img/banner.jpg', link: '#' },
+  { picture: 'img/fb.jpg', link: '#' },
+  { picture: 'img/twitter.jpg', link: '#' },
+  { picture: 'img/youtube.jpg', link: '#' },
+  { picture: 'img/calibre.png', link: '#' },
+];
+
 const articles = [
   {
     picture: 'img/hw.jpg',

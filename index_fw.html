@@ -33,41 +33,21 @@
         </div>
 
 
+        <div class="banner-item">
+            <a @href="link">
+                <img @src="picture">
+            </a>
+        </div>
+
+
 
         <div class="banner">
-            <div>
-                <img src="img/banner.jpg">
-            </div>
-            <div>
-                <a href="#">
-                    <img src="img/fb.jpg">
-                </a>
-            </div>
-            <div>
-                <a href="#">
-                    <img src="img/twitter.jpg">
-                </a>
-            </div>
-            <div>
-                <a href="#">
-                    <img src="img/youtube.jpg">
-                </a>
-            </div>
-            <div>
-                <a href="#">
-                    <img src="img/google.jpg">
-                </a>
-            </div>
-            <div>
-                <a href="#">
-                    <img src="img/calibre.png">
-                </a>
-            </div>
+            <component page="banner-item" foreach data="bannerList"></component>
         </div>
 
 
         <div class="article">
-            <img src="./img/hw.jpg" />
+            <img @src="picture" />
             <div class="hideContent"> {{ hideContent }}</div>
             <div class="show">
                 <a href="#">Show more</a>
@@ -108,10 +88,7 @@
                         </div>
                         <div class="articles">
 
-
-
                             <component page="article" foreach data="articles"></component>
-
 
                         </div>
                     </div>

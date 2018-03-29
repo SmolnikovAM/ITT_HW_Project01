@@ -41,6 +41,17 @@ class ApplicationState {
 
       // console.log(el);
       let matchVars = el.textContent.match(/{{[a-zA-Z0-9.[\]\s_]+}}/gi);
+
+      if (el.nodeType !== 3 && el.attributes) {
+        // console.log(Array.from(el.attributes));
+        Object.keys({ ...el.attributes }).forEach((key, val) => {
+          const attName = el.attributes[key].name;
+          if (attName.indexOf('@') >= 0) {
+            const newKey = attName.replace('@', '');
+            el.setAttribute(newKey, this.value(data, el.attributes[key].value));
+          }
+        });
+      }
       if (matchVars && el.nodeType === 3) {
         matchVars = matchVars.map(str =>
           str
@@ -97,6 +108,7 @@ const data = {
   userName: 'Andrei',
   contacts: { phone: '123123', email: 'asdfasdf' },
   articles,
+  bannerList,
   currentArticle: {},
 };
 
