@@ -4,10 +4,38 @@ html, body {
 
 body {
     height: 100%;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    display:inline-block;
+    width:100%;
+    height:100%;
+}
+
+.banner > div {
+    margin: 5px;
+}
+
+.banner > div:first-child {
+    margin-left: 50px;
+    height: 50px;
+    margin-right: 200px;
 }
 
 .nav {
-    margin-top: 50px;
+    margin-top: 30px;
+    margin-left: 100px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -16,6 +44,32 @@ body {
 .nav > div {
     width: 30%;
     text-align: center;
+    font-size:20px;
+    text-transform: uppercase;
+    word-spacing: 2px;
+}
+
+
+
+.nav > div a:hover {
+    font-size:23px;
+    text-shadow: 1px 1px #A8A8A8;
+}
+
+input {
+    width: 100px;
+    height: 30px;
+    border: none;
+}
+
+.sign {
+    width: 70px;
+    height: 30px;
+    background: none;
+}
+
+.sign.in {
+    margin-right: 10px;
 }
 
 .container {
@@ -25,7 +79,61 @@ body {
 }
 
 .container > div {
-    width: 50%;
+    width: 30%;
     background-color: antiquewhite;
     margin: 10px;
+}
+
+.container > div:first-child {
+    width: 70%;
+}
+
+.main > div:first-child {
+    height: 20px;
+    background-color: #A8A8A8;
+}
+
+.bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.bar > div {
+    width: 150px;
+    text-align: center;
+}
+
+.bar > div > a:hover {
+    background-color: antiquewhite;
+}
+
+.articles {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.articles > div {
+    flex-grow: 1;
+    width: 50%;
+    margin-bottom: 15px;
+}
+
+.hideContent {
+    overflow: hidden;
+    line-height: 18px;
+    height: 18px;
+}
+
+.showContent{
+    height: auto;
+}
+
+.show a {
+    padding: 2px;
+    line-height: 18px;
+    height: auto;
+    color: red;
+    text-decoration: underline;
 }
