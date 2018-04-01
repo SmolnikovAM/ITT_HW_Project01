@@ -6,9 +6,18 @@ const bannerList = [
   { picture: 'img/calibre.png', link: '#' },
 ];
 
+const menuItems = [
+  { text: 'Топ модели:', href: '#' },
+  { text: 'Iphone', href: '#' },
+  { text: 'Samsung', href: '#' },
+  { text: 'Huawei', href: '#' },
+  { text: 'Xiaomi', href: '#' },
+  { text: 'HTC', href: '#' },
+  { text: 'Lenovo', href: '#' },
+];
 const articles = [
   {
-    picture: 'img/hw.jpg',
+    picture: 'img/hw2.jpg',
     hideContent: `Huawei представи бюджетния Y7 Prime (2018) На 27 март Huawei представи не само новите си
   флагмани за първото полугодие, но и един бюджетен модел, който е насочен към младата
   аудитория. Huawei Y7 Prime (2018) предлага 5.99&quot; дисплей с резолюция 1440 x 720

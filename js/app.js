@@ -3,8 +3,9 @@ class ApplicationState {
     // super();
     this.data = data;
     this.HTMLSource = {};
+    this.methods = {};
     this.HTMLRoot = document.getElementById(appId);
-    this.load(hiddenId);
+    this.load();
   }
   // eslint-disable-next-line
   value(inObj, inPath, sliceFirst = false, first = true) {
@@ -27,10 +28,17 @@ class ApplicationState {
     return this.value(inObj[inPath[0]], inPath.slice(1), false, false);
   }
 
-  load(hiddenId) {
-    const arr = Array.from(document.getElementById(hiddenId).children);
-    arr.forEach(html => {
-      this.HTMLSource[html.className] = html;
+  load() {
+    const arr = Array.from(document.getElementsByTagName('script'))
+      .filter(el => el.id.match(/^template_/) && el.type === 'text/template')
+      .map(el => ({
+        name: el.id.replace('template_', ''),
+        sourceHTML: el.innerHTML,
+        node: null,
+        converted: false,
+      }));
+    arr.forEach(el => {
+      this.HTMLSource[el.name] = el;
     });
   }
 
@@ -39,16 +47,22 @@ class ApplicationState {
       if (tmp.indexOf(el) >= 0) return;
       tmp.push(el);
 
-      // console.log(el);
       let matchVars = el.textContent.match(/{{[a-zA-Z0-9.[\]\s_]+}}/gi);
 
       if (el.nodeType !== 3 && el.attributes) {
-        // console.log(Array.from(el.attributes));
         Object.keys({ ...el.attributes }).forEach((key, val) => {
           const attName = el.attributes[key].name;
-          if (attName.indexOf('@') >= 0) {
-            const newKey = attName.replace('@', '');
+          if (attName.indexOf(':') >= 0) {
+            const newKey = attName.replace(':', '');
             el.setAttribute(newKey, this.value(data, el.attributes[key].value));
+          }
+
+          if (attName.indexOf('@click') >= 0) {
+            el.addEventListener(
+              'click',
+              this.methods[el.attributes[key].value],
+            );
+            console.log(el);
           }
         });
       }
@@ -93,7 +107,14 @@ class ApplicationState {
   createNodeFromTemplate(name, data = this.data) {
     if (!Reflect.has(this.HTMLSource, name))
       throw new Error(`No such template ${name}`);
-    const copy = this.HTMLSource[name].cloneNode(true);
+    const el = this.HTMLSource[name];
+    if (!el.converted) {
+      el.converted = true;
+      const div = document.createElement('div');
+      div.innerHTML = el.sourceHTML;
+      el.node = div.firstElementChild;
+    }
+    const copy = this.HTMLSource[name].node.cloneNode(true);
     this.deepParamChange(copy, data);
     return copy;
   }
@@ -109,6 +130,7 @@ const data = {
   contacts: { phone: '123123', email: 'asdfasdf' },
   articles,
   bannerList,
+  menuItems,
   currentArticle: {},
 };
 
@@ -117,6 +139,10 @@ const STATE = new ApplicationState({
   hiddenId: 'application_hidden_layer',
   appId: 'app',
 });
+
+STATE.methods.showClick = () => {
+  alert('test');
+};
 
 function render(state) {
   state.data.currentArticle = state.data.articles[1];
