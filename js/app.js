@@ -1,10 +1,12 @@
 class ApplicationState {
-  constructor({ data, hiddenId, appId }) {
+  constructor({ data, hiddenId, appId, routes }) {
     // super();
     this.data = data;
+    this.routes = routes;
     this.HTMLSource = {};
     this.methods = {};
     this.HTMLRoot = document.getElementById(appId);
+    this.routerCurrentPage = 'main-router';
     this.load();
   }
   // eslint-disable-next-line
@@ -29,6 +31,11 @@ class ApplicationState {
   }
 
   load() {
+    window.addEventListener('hashchange', e => this.router(e));
+    window.addEventListener('load', e => {
+      this.router({ newURL: window.location.href });
+    });
+
     const arr = Array.from(document.getElementsByTagName('script'))
       .filter(el => el.id.match(/^template_/) && el.type === 'text/template')
       .map(el => ({
@@ -40,6 +47,28 @@ class ApplicationState {
     arr.forEach(el => {
       this.HTMLSource[el.name] = el;
     });
+  }
+  router(e) {
+    const urlArr = e.newURL.split('#');
+    if (urlArr.length === 1) this.routerCurrentPage = this.routes.main;
+    else {
+      const url = urlArr[1].split('&')[0];
+      // console.log(url);
+      if (Reflect.has(this.routes, url)) {
+        this.routerCurrentPage = this.routes[url];
+      } else {
+        this.routerCurrentPage = this.routes.main;
+      }
+      this.data.params = window.location.hash
+        .replace('#', '')
+        .split('&')
+        .map(x => x.split('='))
+        .reduce((a, b) => {
+          a[b[0]] = b[1]; // eslint-disable-line
+          return a;
+        }, {});
+    }
+    this.render();
   }
 
   deepParamChange(element, data = this.data) {
@@ -62,7 +91,6 @@ class ApplicationState {
               'click',
               this.methods[el.attributes[key].value],
             );
-            console.log(el);
           }
         });
       }
@@ -122,6 +150,11 @@ class ApplicationState {
   appendNodeFromTemplate(name, parent = this.HTMLRoot, data = this.data) {
     parent.appendChild(this.createNodeFromTemplate(name, data));
   }
+
+  render() {
+    this.HTMLRoot.innerHTML = '';
+    this.appendNodeFromTemplate(this.routerCurrentPage);
+  }
 }
 
 const data = {
@@ -134,8 +167,16 @@ const data = {
   currentArticle: {},
 };
 
+const routes = {
+  main: 'main',
+  login: 'login',
+  '404': '404',
+  register: 'register',
+};
+
 const STATE = new ApplicationState({
   data,
+  routes,
   hiddenId: 'application_hidden_layer',
   appId: 'app',
 });
@@ -143,9 +184,3 @@ const STATE = new ApplicationState({
 STATE.methods.showClick = () => {
   alert('test');
 };
-
-function render(state) {
-  state.data.currentArticle = state.data.articles[1];
-  state.appendNodeFromTemplate('main-router');
-}
-render(STATE);
