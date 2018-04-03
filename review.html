@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/review.css"/>
     <title></title>
 </head>
 <body>
@@ -33,30 +34,17 @@
 <main>
     <div class="container">
         <div class="main">
-            <div class="main-articles">
+            <div class="review-articles">
                 <div>
-                    <img src="img/hw.jpg"/>
-                    <div class="content">
-                        <a href="#">Huawei представи бюджетния Y7 Prime (2018)</a>
-                    </div>
+                    <h3>Bla</h3>
+                    <img src="img/review/htc%20u11.jpg" alt="htc">
+                    <h4></h4>
+                    <p></p>
+                    <iframe></iframe>
                 </div>
-                <div>
-                    <img src="img/hw2.jpg"/>
-                    <div class="content">
-                        <a href="#">Huawei P smart</a>
-                    </div>
-                </div>
-                <div>
-                    <img src="img/htc1.jpg"/>
-                    <div class="content">
-                        <a href="#">HTC U11 Life</a>
-                    </div>
-                </div>
-                <div>
-                    <img src="img/moto.jpg"/>
-                    <div class="content">
-                        <a href="#">Motorola Moto Z2 Play</a>
-                    </div>
+                <div class="pagination">
+                    <div>previous</div>
+                    <div>next</div>
                 </div>
             </div>
         </div>
@@ -118,44 +106,49 @@
             </div>
         </div>
     </div>
-    </script>
+</script>
 
 <!--<script id="login-template" type="text/x-handlebars-template">-->
 <script type="text/template" id="login_nav">
-    <div class="sign form">
-        <div>
-            <label>Username</label>
-            <input type="text" minlength="3" name="username"/>
+    <form>
+        <div class="sign form">
+            <div>
+                <label>Username</label>
+                <input type="text" minlength="3" name="username"/>
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="password" minlength="3" name="username"/>
+            </div>
+            <div>
+                <button class="btn login" type="submit">sign in</button>
+            </div>
         </div>
-        <div>
-            <label>Password</label>
-            <input type="password" minlength="3" name="username"/>
-        </div>
-        <div>
-            <button class="btn login" type="submit">sign in</button>
-        </div>
-    </div>
+    </form>
 </script>
 
 <!--<script id="register-template" type="text/x-handlebars-template">-->
 <script type="text/template" id="register_nav">
-    <div class="sign form">
-        <div>
-            <label>Username</label>
-            <input type="text" minlength="3" name="username"/>
+    <form>
+        <div class="sign form">
+            <div>
+                <label>Username</label>
+                <input type="text" minlength="3" name="username"/>
+            </div>
+
+            <div>
+                <label>Password</label>
+                <input type="password" minlength="7" name="password"/>
+            </div>
+            <div>
+                <label>Repeat Password</label>
+                <input type="password" minlength="7" name="repeatPassword"/>
+            </div>
+            <div>
+                <button class="btn register" type="submit">register</button>
+            </div>
         </div>
-        <div>
-            <label>Password</label>
-            <input type="password" minlength="7" name="password"/>
-        </div>
-        <div>
-            <label>Repeat Password</label>
-            <input type="password" minlength="7" name="repeatPassword"/>
-        </div>
-        <div>
-            <button class="btn register" type="submit">register</button>
-        </div>
-    </div>
+    </form>
 </script>
 </body>
 </html>

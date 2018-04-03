@@ -160,6 +160,7 @@ class ApplicationState {
 const data = {
   login: 'userlogin',
   userName: 'Andrei',
+    temp:{a:{b:'test'}},
   contacts: { phone: '123123', email: 'asdfasdf' },
   articles,
   bannerList,
