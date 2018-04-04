@@ -158,14 +158,14 @@ img {
 }
 
 
-.sign.form {
+.form {
     display: flex;
     flex-direction: column;
 }
 
-.sign.form > div {
+.form > div {
     width: 100%;
-    text-align: center;
+    text-align: end;
     padding: 5px;
 }
 
@@ -245,3 +245,4 @@ footer p {
     width: 30px;
     height: 30px;
 }
+
