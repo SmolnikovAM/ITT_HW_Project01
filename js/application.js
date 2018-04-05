@@ -1,7 +1,16 @@
 class Application {
-  constructor({ view, model, router, controller }) {
-    this.render = view.createRenderFunction({ model, controller });
-    this.render('main');
+  constructor({ view, router }) {
+    router.routerMap.forEach(route => {
+      const { model, controller, pathname } = route;
+      route.render = () =>
+        view.createRenderFunction({ model, controller })(pathname);
+      controller.methods._route = router.startRouting(view);
+    });
+
+    router.routerMap[0].render();
+
+    // this.render =
+    // this.render('main');
   }
 }
 
@@ -27,6 +36,9 @@ const methods = {
 const view = new View();
 const model = new Model(data, mainData);
 const controller = new Controller(methods);
-const router = new Router();
+const router = new Router([
+  { pathname: '/index_fw2.html', model: model, controller: controller },
+  { pathname: '/test.html', model: model, controller: controller },
+]);
 
 const app = new Application({ view, model, controller, router });

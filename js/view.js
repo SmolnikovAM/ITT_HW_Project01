@@ -8,14 +8,29 @@ class View {
       appId = 'app',
     } = options;
 
+    this.options = {
+      tag,
+      idPattrn,
+      type,
+      appId,
+    };
+    this.options.idPattrnRegExp = new RegExp(this.options.idPattrn);
+
     this.HTMLRoot = document.getElementById(appId);
     this.HTMLSource = {};
+    this.parsedFiles = ['index.html'];
+    this.patternParse(document);
+  }
 
-    const idPattrnRegExp = new RegExp(idPattrn);
-    const arr = Array.from(document.getElementsByTagName(tag))
-      .filter(el => el.id.match(idPattrnRegExp) && el.type === type)
+  patternParse(DOM) {
+    const arr = Array.from(DOM.getElementsByTagName(this.options.tag))
+      .filter(
+        el =>
+          el.id.match(this.options.idPattrnRegExp) &&
+          el.type === this.options.type,
+      )
       .map(el => ({
-        name: el.id.replace(idPattrnRegExp, ''),
+        name: el.id.replace(this.options.idPattrnRegExp, ''),
         sourceHTML: el.innerHTML,
         node: null,
         converted: false,
@@ -24,7 +39,6 @@ class View {
       this.HTMLSource[el.name] = el;
     });
   }
-
   value(inObj, inPath, sliceFirst = false, first = true, set = false) {
     if (first) {
       let newPath = inPath;
@@ -109,6 +123,13 @@ class View {
         }
       });
     }
+
+    if (el.tagName === 'A') {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        methods._route(el.href, e);
+      });
+    }
   }
 
   replaceMustache({ text, data }) {
@@ -178,8 +199,9 @@ class View {
   }
 
   createNodeFromTemplate(name, data, methods) {
-    if (!Reflect.has(this.HTMLSource, name))
+    if (!Reflect.has(this.HTMLSource, name)) {
       throw new Error(`No such template ${name}`);
+    }
     const el = this.HTMLSource[name];
     if (!el.converted) {
       el.converted = true;
