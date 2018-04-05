@@ -21,10 +21,14 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.9.0",
+    "http-server": "^0.11.1",
     "prettier": "^1.11.1"
   },
   "eslintConfig": {
-    "extends": ["airbnb-base", "prettier"],
+    "extends": [
+      "airbnb-base",
+      "prettier"
+    ],
     "rules": {
       "no-restricted-syntax": [
         "error",
@@ -32,8 +36,18 @@
         "LabeledStatement",
         "WithStatement"
       ],
-      "no-underscore-dangle": [0],
+      "no-underscore-dangle": [
+        0
+      ],
       "no-console": 0
+    },
+    "globals": {
+      "window": true,
+      "document": true,
+      "WebSocket": true,
+      "XMLHttpRequest": true,
+      "fetch": true,
+      "Headers": true
     }
   },
   "prettier": {
