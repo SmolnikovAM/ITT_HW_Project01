@@ -39,6 +39,7 @@ const controller = new Controller(methods);
 const router = new Router([
   { pathname: '/index_fw2.html', model: model, controller: controller },
   { pathname: '/test.html', model: model, controller: controller },
+  { pathname: '/html/test.html', model: model, controller: controller },
 ]);
 
 const app = new Application({ view, model, controller, router });
