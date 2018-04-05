@@ -1,0 +1,36 @@
+<script type="text/template" id="template_/html/learning/learn_p3.html">
+    <div class="main-container-in-page">
+        <h1> example of template iteration  </h1>
+        this is example of iteration if component
+    </br>
+     we have to create
+     <br>
+     {{ articles.test1.field2 }}
+
+    <input model="mainData.login" type="text">
+
+    <ul>
+        links to different pages/ witch were created by iteration of array
+       <component  foreach data="nameSmth"/>
+    </ul>  
+
+    <hr>
+    <h2>
+  
+            <style>
+            .main-container-in-page{
+                border: 2px solid black;
+                height: 600px 
+            }
+    
+        </style>
+    </div>  
+</script>
+
+
+<script type="text/template" id="template_iteration">
+    <li>
+        <a  :href="link">{{ text }} </a>      
+    </li>
+ 
+</script>

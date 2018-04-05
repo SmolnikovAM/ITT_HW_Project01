@@ -16,8 +16,15 @@ const mainDataInput = {
 };
 
 const data = {
-  someText: 'somthing',
+  // model.data
+  someText: 'something',
   title: 'header',
+  nameSmth: [
+    { text: 'link to first page', link: '/html/learning/learn.html' },
+    { text: 'link to second page', link: '/html/learning/learn_p2.html' },
+    { text: 'link to third page', link: '/html/learning/learn_p3.html' },
+  ],
+  articles: { test1: { field2: 'deep text ' } },
 };
 
 const methods = {
@@ -40,8 +47,13 @@ const router = new Router([
     model: model,
     controller: controller,
   },
+  {
+    pathname: '/html/learning/learn_p3.html',
+    model: model,
+    controller: controller,
+  },
 ]);
 
-const app = new Application({ view, model, controller, router });
+const app = new Application({ view, router });
 
 app.router.routerMap[0].render();
