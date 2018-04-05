@@ -18,7 +18,7 @@ class View {
 
     this.HTMLRoot = document.getElementById(appId);
     this.HTMLSource = {};
-    this.parsedFiles = ['index.html'];
+    this.parsedFiles = [];
     this.patternParse(document);
   }
 

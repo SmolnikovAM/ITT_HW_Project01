@@ -9,13 +9,12 @@ class Router {
       render: () => {},
     }));
 
-    window.addEventListener('popstate', e => {
+    window.addEventListener('popstate', () => {
       this.route(window.location.href, false);
-      // console.log(e);
     });
   }
+  // eslint-disable-next-line
   parseURL(href) {
-    this;
     const aTmp = document.createElement('a');
     aTmp.href = href;
     const {
@@ -58,8 +57,11 @@ class Router {
       }
       page.render();
     };
-    if (this.view.parsedFiles.indexOf(parse.pathname) === -1) {
-      fetch(`${parse.pathname}`, new Headers({ 'Content-Type': 'text/plain' }))
+    if (
+      !Reflect.has(this.view.HTMLSource, parse.pathname) &&
+      this.view.parsedFiles.indexOf(parse.pathname) === -1
+    ) {
+      fetch(parse.pathname, new Headers({ 'Content-Type': 'text/plain' }))
         .then(res => res.text())
         .then(res => {
           const fr = document.createElement('div');
@@ -70,12 +72,7 @@ class Router {
     } else renderPage();
   }
   startRouting(view) {
-    // window.addEventListener('popstate', e => {
-    //   // showPage(getUrlPage(location.href));
-    //   console.log(window.location.href);
-    // });
     this.view = view;
-
     return (...args) => this.route(...args);
   }
 }

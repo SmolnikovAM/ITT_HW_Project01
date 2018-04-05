@@ -11,16 +11,13 @@ class Application {
 }
 
 const mainDataInput = {
-  login: 'userlogin',
-  userName: 'Andrei',
+  login: 'user login',
+  userName: 'user name',
 };
 
 const data = {
-  contacts: { phone: '123123', email: 'asdfasdf' },
-  articles,
-  bannerList,
-  menuItems,
-  currentArticle: {},
+  someText: 'somthing',
+  title: 'header',
 };
 
 const methods = {
@@ -33,9 +30,16 @@ const view = new View();
 const model = new Model(data, storage);
 const controller = new Controller(methods);
 const router = new Router([
-  { pathname: '/index_fw2.html', model: model, controller: controller },
-  { pathname: '/test.html', model: model, controller: controller },
-  { pathname: '/html/test.html', model: model, controller: controller },
+  {
+    pathname: '/html/learning/learn.html',
+    model: model,
+    controller: controller,
+  },
+  {
+    pathname: '/html/learning/learn_p2.html',
+    model: model,
+    controller: controller,
+  },
 ]);
 
 const app = new Application({ view, model, controller, router });

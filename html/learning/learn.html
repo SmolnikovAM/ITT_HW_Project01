@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="bg">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+
+<body>
+
+<!-- MAIN APPLICATION -->
+<div id="app">
+
+</div>
+
+<!-- MAIN APPLICATION -->
+
+
+<script type="text/template" id="template_/html/learning/learn.html">
+  <div class="main-container-in-page">
+      <h1> Main page component </h1>
+      This component is main for the page and have to be named by the routing rules
+    <pre>
+    /html/learning/learn.html
+    </pre>
+      and full script tag is
+      <pre>
+    <span><<span>script type="text/template" id="template_/html/learning/learn.html">
+        <span><<span>div>
+            ----HTML CODE INSIDE----
+        <span><<span>div>    
+    <span><<span>/script  
+    </pre>
+     
+    Main thing that inside script tag must be only one child element
+     
+    you can create
+    <br>
+    in one html document you can save a lot of pages. You must 
+
+    <div class="footer">
+        <a href="/html/learning/learn_p2.html">link to next page</a>
+    </div>
+     
+    <style>
+            .main-container-in-page{
+                border: 2px solid black;
+                height: 600px 
+            }
+            .footer{
+
+            }
+    </style>
+</div>  
+</script>
+
+
+<script type="text/template" id="template_/html/learning/learn_p2.html">
+    <div class="div-with-some-text">
+            <h2> {{ title }} </h2> 
+            {{ someText }}
+            
+            
+    <div class="footer">
+            <a href="/html/learning/learn.html">back</a>
+        </div>
+            <style>
+                .div-with-some-text{
+                    border: 2px solid black;
+                    height: 100px 
+                }
+            </style>
+        </div>
+      
+</script>
+
+<script type="text/template" id="template_iteration">
+    <div class="div-with-some-text">
+        <h2> {{ title }} </h2> 
+        {{ someText }}        
+        <style>
+            .div-with-some-text{
+                border: 2px solid black;
+                height: 100px 
+            }
+        </style>
+    </div>
+    
+</script>
+
+
+
+
+
+
+
+</body>
+
+<script src="../../js/data.js"></script>
+<script src="../../js/model.js"></script>
+<script src="../../js/controller.js"></script>
+<script src="../../js/view.js"></script>
+<script src="../../js/router.js"></script>
+<script src="./learnapp.js"></script>
+
+</html>
