@@ -6,17 +6,23 @@ class View {
       idPattrn = '^template_',
       type = 'text/template',
       main = '.main',
+      appId,
     } = options;
 
     this.options = {
       tag,
       idPattrn,
       type,
-        main,
+      main,
+      appId,
     };
 
     this.options.idPattrnRegExp = new RegExp(this.options.idPattrn);
-    this.HTMLRoot = document.querySelector(main);
+    if (appId) {
+      this.HTMLRoot = document.getElementById(appId);
+    } else {
+      this.HTMLRoot = document.querySelector(main);
+    }
     this.HTMLSource = {};
     this.parsedFiles = [];
     this.patternParse(document);
@@ -98,6 +104,12 @@ class View {
           el.addEventListener('keydown', () => {
             modif.set(el.value);
           });
+        }
+
+        if (attName === 'if') {
+          const modif = this.value(data, param, false, true, false);
+          console.log(el, modif);
+          if (!modif) el.style.display = 'none';
         }
 
         if (attName.indexOf('@click') >= 0) {
@@ -205,10 +217,29 @@ class View {
     const el = this.HTMLSource[name];
     if (!el.converted) {
       el.converted = true;
-      const div = document.createElement('div');
-      div.innerHTML = el.sourceHTML;
-      el.node = div.firstElementChild;
+      let tag = el.sourceHTML.match(/[<].+([>]|[\s])/)[0];
+      tag = tag
+        .replace('<', '')
+        .replace('>', '')
+        .trim();
+      switch (tag) {
+        case 'div':
+          tag = 'div';
+          break;
+        case 'tr':
+          tag = 'tbody';
+          break;
+        default:
+          tag = 'div';
+          break;
+      }
+      const elem = document.createElement(tag);
+
+      elem.innerHTML = el.sourceHTML;
+      // console.log(elem);
+      el.node = elem.firstElementChild;
     }
+    // console.log(this.HTMLSource[name]);
     const copy = this.HTMLSource[name].node.cloneNode(true);
     this.deepParamChange(copy, data, methods);
     return copy;

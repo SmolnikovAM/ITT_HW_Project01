@@ -6,4 +6,8 @@ class Controller {
       console.log(...e);
     };
   }
+  // eslint-disable-next-line
+  // beforeRender(model) {
+  //   console.log(model.params);
+  // }
 }

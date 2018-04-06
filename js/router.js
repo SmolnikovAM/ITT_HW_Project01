@@ -2,12 +2,15 @@
 class Router {
   constructor(routerMap = []) {
     this.routerID = Symbol('routerID');
-    this.routerMap = routerMap.map(({ pathname, model, controller }) => ({
-      pathname,
-      model,
-      controller,
-      render: () => {},
-    }));
+    this.routerMap = routerMap.map(
+      ({ pathname, model, controller, beforeRender }) => ({
+        pathname,
+        model,
+        controller,
+        render: () => {},
+        beforeRender: beforeRender || (() => {}),
+      }),
+    );
 
     window.addEventListener('popstate', () => {
       this.route(window.location.href, false);
@@ -35,7 +38,7 @@ class Router {
         a[b[0]] = b[1]; // eslint-disable-line
         return a;
       }, {});
-
+    // console.log(pathname, search);
     return {
       protocol, // => "http:"
       hostname, // => "example.com"
@@ -51,9 +54,13 @@ class Router {
     const parse = this.parseURL(href);
     const page = this.routerMap.find(x => x.pathname === parse.pathname);
     if (page === undefined) return;
+    page.model.data.params = parse.params;
+    // console.log(href, page);
+    page.beforeRender(page.model);
+
     const renderPage = () => {
       if (history) {
-        window.history.pushState({ href }, page.title, page.pathname);
+        window.history.pushState({ href }, page.title, href);
       }
       page.render();
     };

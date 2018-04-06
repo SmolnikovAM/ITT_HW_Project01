@@ -1,0 +1,28 @@
+.div-with-some-text{
+    border: 2px solid black;
+    height: 100px 
+}
+
+.div-with-some-text{
+    border: 2px solid black;
+    height: 100px 
+}
+
+.main-container-in-page{
+    border: 2px solid black;
+    height: 600px 
+}
+
+.link{
+    border: 1px solid black 
+}
+.col{
+    width: 100px;
+    height: 100px; 
+    display: inline-block;
+    border: 1px solid black;
+}
+.row{
+    display:flex;
+}
+
