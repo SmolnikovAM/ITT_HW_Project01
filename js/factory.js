@@ -9,8 +9,6 @@ const factoryTemplate = (function () {
                 case "review":
                 case "login":
                 case "register":
-                default:
-
             }
         }
     }

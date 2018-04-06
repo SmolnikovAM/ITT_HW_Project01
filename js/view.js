@@ -5,18 +5,18 @@ class View {
       tag = 'script',
       idPattrn = '^template_',
       type = 'text/template',
-      appId = 'app',
+      main = '.main',
     } = options;
 
     this.options = {
       tag,
       idPattrn,
       type,
-      appId,
+        main,
     };
-    this.options.idPattrnRegExp = new RegExp(this.options.idPattrn);
 
-    this.HTMLRoot = document.getElementById(appId);
+    this.options.idPattrnRegExp = new RegExp(this.options.idPattrn);
+    this.HTMLRoot = document.querySelector(main);
     this.HTMLSource = {};
     this.parsedFiles = [];
     this.patternParse(document);

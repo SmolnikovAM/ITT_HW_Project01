@@ -25,7 +25,7 @@
             като част от китайския гигант Lenovo.
         </div>
         <div class="show">
-            <a href="#">show more</a>
+            <a href="#">...Show More</a>
         </div>
     </div>
     <div>
@@ -85,7 +85,7 @@
             изобретението могат да се появят на пазара още през 2019 или 2020 година.
         </div>
         <div class="show">
-            <a href="#">show more</a>
+            <a href="#">...Show More</a>
         </div>
     </div>
     <div>
@@ -112,7 +112,7 @@
             дълго.
         </div>
         <div class="show">
-            <a href="#">show more</a>
+            <a href="#">...Show More</a>
         </div>
     </div>
     <div>
@@ -170,7 +170,24 @@
             подобна на iOS операционна система за специфични задачи.
         </div>
         <div class="show">
-            <a href="#">show more</a>
+            <a href="#">...Show More</a>
         </div>
     </div>
 </div>
+
+<script>
+    const elements = document.querySelectorAll(".show");
+    Array.from(elements).forEach(el => el.addEventListener("click", function (event) {
+        const a = event.currentTarget.lastElementChild,
+            parent = event.currentTarget.previousElementSibling;
+        if (a.textContent.toUpperCase() === "...SHOW MORE") {
+            a.textContent = "...Show Less";
+            parent.classList.remove("hideContent");
+            parent.classList.add("show");
+        } else {
+            a.textContent = "...Show More";
+            parent.classList.remove("show");
+            parent.classList.add("hideContent");
+        }
+    }));
+</script>
