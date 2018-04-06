@@ -108,7 +108,7 @@ class View {
 
         if (attName === 'if') {
           const modif = this.value(data, param, false, true, false);
-          console.log(el, modif);
+          // console.log(el, modif);
           if (!modif) el.style.display = 'none';
         }
 
