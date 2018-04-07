@@ -1,16 +1,3 @@
-class Application {
-  constructor({ view, router }) {
-    this.router = router;
-    router.routerMap.forEach(route => {
-      const { model, controller, pathname } = route;
-      // eslint-disable-next-line
-      route.render = () =>
-        view.createRenderFunction({ model, controller })(pathname);
-      controller.methods._route = router.startRouting(view);
-    });
-  }
-}
-
 const mainDataInput = {
   login: 'user login',
   userName: 'user name',
@@ -26,8 +13,6 @@ const data = {
   ],
   articles: { test1: { field2: 'deep text ' } },
 };
-
-console.log(data.articles.test1.field2);
 
 const methods = {
   showClick() {},
@@ -88,6 +73,7 @@ const router = new Router([
     pathname: '/html/learning/learn.html',
     model: modelInit,
     controller: controllerInit,
+    startPage: true,
   },
   {
     pathname: '/html/learning/template.html',
@@ -107,6 +93,4 @@ const router = new Router([
   },
 ]);
 
-const app = new Application({ view, router });
-
-app.router.routerMap[0].render();
+const app = new Application({ view, router, beginFromStartPage: false });
