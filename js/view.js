@@ -109,6 +109,7 @@ class View {
         if (attName === 'if') {
           const modif = this.value(data, param, false, true, false);
           // console.log(el, modif);
+          // eslint-disable-next-line
           if (!modif) el.style.display = 'none';
         }
 

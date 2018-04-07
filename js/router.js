@@ -8,7 +8,11 @@ class Router {
         model,
         controller,
         render: () => {},
-        beforeRender: beforeRender || (() => {}),
+        beforeRender:
+          beforeRender ||
+          ((_, cb) => {
+            cb();
+          }),
       }),
     );
 
@@ -55,29 +59,33 @@ class Router {
     const page = this.routerMap.find(x => x.pathname === parse.pathname);
     if (page === undefined) return;
     page.model.data.params = parse.params;
-    // console.log(href, page);
-    page.beforeRender(page.model);
+    const cb = () => {
+      // console.log(href, page);
 
-    const renderPage = () => {
-      if (history) {
-        window.history.pushState({ href }, page.title, href);
-      }
-      page.render();
+      const renderPage = () => {
+        if (history) {
+          window.history.pushState({ href }, page.title, href);
+        }
+        page.render();
+      };
+      if (
+        !Reflect.has(this.view.HTMLSource, parse.pathname) &&
+        this.view.parsedFiles.indexOf(parse.pathname) === -1
+      ) {
+        fetch(parse.pathname, new Headers({ 'Content-Type': 'text/plain' }))
+          .then(res => res.text())
+          .then(res => {
+            const fr = document.createElement('div');
+            fr.innerHTML = res;
+            this.view.patternParse(fr);
+            renderPage();
+          });
+      } else renderPage();
     };
-    if (
-      !Reflect.has(this.view.HTMLSource, parse.pathname) &&
-      this.view.parsedFiles.indexOf(parse.pathname) === -1
-    ) {
-      fetch(parse.pathname, new Headers({ 'Content-Type': 'text/plain' }))
-        .then(res => res.text())
-        .then(res => {
-          const fr = document.createElement('div');
-          fr.innerHTML = res;
-          this.view.patternParse(fr);
-          renderPage();
-        });
-    } else renderPage();
+
+    page.beforeRender(page.model, cb);
   }
+
   startRouting(view) {
     this.view = view;
     return (...args) => this.route(...args);

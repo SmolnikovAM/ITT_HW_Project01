@@ -63,7 +63,7 @@ const controllerInit = new Controller(methods);
 const modelTabs = new Model(dataForTabs, storage);
 const controllerTabs = new Controller(methodsTabs);
 
-const beforeRenderArticles = model => {
+const beforeRenderArticles = (model, cb) => {
   let { page } = model.data.params;
   const { pageCount, articles } = model.data;
   if (page === undefined) page = 1;
@@ -78,6 +78,8 @@ const beforeRenderArticles = model => {
 
   model.data.showBack = !(page <= 1);
   model.data.showNext = !(page >= pageCount);
+
+  cb();
 };
 
 const router = new Router([
