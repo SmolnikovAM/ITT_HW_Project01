@@ -72,7 +72,8 @@ class Router {
         !Reflect.has(this.view.HTMLSource, parse.pathname) &&
         this.view.parsedFiles.indexOf(parse.pathname) === -1
       ) {
-        fetch(parse.pathname, new Headers({ 'Content-Type': 'text/plain' }))
+        // parse.pathname
+        fetch(href, new Headers({ 'Content-Type': 'text/plain' }))
           .then(res => res.text())
           .then(res => {
             const fr = document.createElement('div');
