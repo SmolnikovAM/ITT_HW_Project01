@@ -93,4 +93,4 @@ const router = new Router([
   },
 ]);
 
-const app = new Application({ view, router, beginFromStartPage: false });
+const app = new Application({ view, router, beginFromStartPage: true });
