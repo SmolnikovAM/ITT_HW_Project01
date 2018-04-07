@@ -79,6 +79,7 @@ const beforeRenderArticles = (model, cb) => {
   model.data.showBack = !(page <= 1);
   model.data.showNext = !(page >= pageCount);
 
+  // this callback for async rendering
   cb();
 };
 

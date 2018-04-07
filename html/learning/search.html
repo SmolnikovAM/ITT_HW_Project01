@@ -1,0 +1,26 @@
+<script type="text/template" id="template_/html/learning/tabs.html">
+<div>
+            
+<h1>This is example of chainging content of the page thats depends of parametr </h1>
+
+<a href="/html/learning/learn.html"> back to content </a> 
+
+Quae non in beatae error earum nisi voluptate est, fuga voluptates dignissimos quibusdam, quaerat repellendus adipisci similique eos ad, veritatis aliquid quia.
+
+<span class="link"> <a if="showBack" :href="/html/learning/tabs.html?page={{ pageBack }}"> BACK </a> </span>
+<span class="link"> <a if="showNext" :href="/html/learning/tabs.html?page={{ pageNext }}"> NEXT </a> </span>
+
+<component page="iteration_for_table" foreach data="articlesToShow"/>
+    
+</div>
+
+</script>
+
+<script type="text/template" id="template_iteration_for_table">
+    <div class="row">
+            <div class="col">{{ id }}</div>
+            <div class="col">{{ name }}</div>
+            <div class="col">{{ text }}</div>
+   
+   </div>
+</script>
