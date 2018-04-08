@@ -11,44 +11,43 @@
 
 <script type="text/template" id="template_/html/learning/learn_p3.html">
     <div class="main-container-in-page">
-        <h1> example of template iteration  </h1>
+        <h1> example of template iteration </h1>
         this is example of iteration if component
-    </br>
-     we have to create
-     <br>
-     {{ articles.test1.field2 }}
+        </br>
+        we have to create
+        <br>
+        {{ articles.test1.field2 }}
 
-    <input model="mainData.login" type="text">
+        <input model="mainData.login" type="text">
 
-    <ul>
-        links to different pages/ witch were created by iteration of array
-       <component page="iteration" foreach data="nameSmth"/>
-    </ul>  
+        <ul>
+            links to different pages/ witch were created by iteration of array
+            <component page="iteration" foreach data="nameSmth"/>
+        </ul>
 
-    <hr>
-    <h2>
-  
+        <hr>
+        <h2></h2>
+
             <style>
-            .main-container-in-page{
-                border: 2px solid black;
-                height: 600px 
-            }
-    
-        </style>
-    </div>  
+                .main-container-in-page {
+                    border: 2px solid black;
+                    height: 600px
+                }
+
+            </style>
+    </div>
 </script>
 
 
 <script type="text/template" id="template_iteration">
     <li>
-        <a  :href="link">{{ text }} </a>      
+        <a :href="link">{{ text }} </a>
     </li>
- 
+
 </script>
 
 
-
 <script src="../../js/lib.js"></script>
-<script src="./learnapp.js"></script>
+<script src="learnapp.js"></script>
 </body>
 </html>

@@ -176,7 +176,7 @@ img {
     padding: 5px;
 }
 
-.form > div  > input, .btn.login, .btn.register {
+.form > div  > input, .btn {
     margin-left: auto;
     margin-right: auto;
     height: 30px;
@@ -192,7 +192,16 @@ background-color: aqua;
     background-color: darksalmon;
 }
 
+.btn {
+    margin-bottom: 5px;
+}
 
+.form > p {
+    text-align: center;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
 
 footer {
     width: 98%;

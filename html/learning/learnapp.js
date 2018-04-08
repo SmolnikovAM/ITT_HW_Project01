@@ -9,7 +9,7 @@ const data = {
   nameSmth: [
     { text: 'link to first page', link: '/html/learning/learn.html' },
     { text: 'link to second page', link: '/html/learning/learn_p2.html' },
-    { text: 'link to third page', link: '/html/learning/learn_p3.html' },
+    { text: 'link to third page', link: '/html/learning/tabs.html' },
   ],
   articles: { test1: { field2: 'deep text ' } },
 };
@@ -93,4 +93,4 @@ const router = new Router([
   },
 ]);
 
-const app = new Application({ view, router, beginFromStartPage: true });
+const app = new Application({ view, router, beginFromStartPage: false });
