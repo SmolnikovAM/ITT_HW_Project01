@@ -6,20 +6,22 @@ const Storage = (function () {
     reviewData,
     supported = false;
 
+  const USERS = "users";
+
   try {
     supported = 'localStorage' in window && window.localStorage !== null;
   } catch (e) {
+    console.log(e.message);
   }
 
   return {
     setData: (prop, value) => {
       if (supported) {
-        if (typeof value !== 'string') {
-          value = JSON.stringify(value);
-        }
-        localStorage.setItem(prop, value);
+        const storagePropValue = localStorage[prop] ? this.getData(prop) : [];
+        storagePropValue.push(value);
+        localStorage.setItem(prop, JSON.stringify(storagePropValue));
       } else {
-        localData[prop] = value;
+        localData[prop] ? localData[prop].push(value) : localData[prop] = [value];
       }
     },
     getData: (prop) => {
@@ -100,5 +102,13 @@ const Storage = (function () {
 
       return mobilesData;
     },
+    hasUser: (username, password) => {
+      if (supported) {
+        const usersData = this.getData(user);
+        return !!usersData.find((id) => {
+          return user.username === username && user.password === password;
+        });
+      }
+    }
   };
 })();
