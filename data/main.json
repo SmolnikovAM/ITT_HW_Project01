@@ -1,18 +1,22 @@
 {
   "1": {
     "img": "img/hw.jpg",
-    "title": "Huawei представи бюджетния Y7 Prime (2018)"
+    "title": "Huawei представи бюджетния Y7 Prime (2018)",
+    "id": 1
   },
   "2": {
     "img": "img/hw2.jpg",
-    "title": "Huawei P smart"
+    "title": "Huawei P smart",
+    "id": 2
   },
   "3": {
     "img": "img/htc1.jpg",
-    "title": "HTC U11 Life"
+    "title": "HTC U11 Life",
+    "id": 3
   },
   "4": {
     "img": "img/moto.jpg",
-    "title": "Motorola Moto Z2 Play"
+    "title": "Motorola Moto Z2 Play",
+    "id": 4
   }
 }

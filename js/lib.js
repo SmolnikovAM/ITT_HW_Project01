@@ -184,10 +184,11 @@ class View {
               methods[methodName](...params, e),
             );
           } else {
-            if (Reflect.has(methods, paramName)) {
+            console.log(methods);
+            if (!Reflect.has(methods, paramName)) {
               throw new Error(`No such method ${paramName}`);
             }
-            el.addEventListener('click', methods[paramName]);
+            el.addEventListener('click', e => methods[paramName](e));
           }
         }
       });
@@ -243,24 +244,32 @@ class View {
           ? this.value(data, el.attributes.data.value)
           : data;
         const page = el.attributes.page.value;
+        let goInside = true;
+        if (Reflect.has(el.attributes, 'if')) {
+          if (!Reflect.has(data, el.attributes.if.value))
+            throw new Error(`No such field in data ${el.attributes.if.value}`);
+          if (!data[el.attributes.if.value]) goInside = false;
+        }
 
-        if (Reflect.has(el.attributes, 'foreach')) {
-          Object.keys(dataChild).forEach(key => {
+        if (goInside) {
+          if (Reflect.has(el.attributes, 'foreach')) {
+            Object.keys(dataChild).forEach(key => {
+              const newChild = this.createNodeFromTemplate(
+                page,
+                dataChild[key],
+                methods,
+              );
+              el.parentElement.insertBefore(newChild, el);
+            });
+            el.parentElement.removeChild(el);
+          } else {
             const newChild = this.createNodeFromTemplate(
               page,
-              dataChild[key],
+              dataChild,
               methods,
             );
-            el.parentElement.insertBefore(newChild, el);
-          });
-          el.parentElement.removeChild(el);
-        } else {
-          const newChild = this.createNodeFromTemplate(
-            page,
-            dataChild,
-            methods,
-          );
-          el.parentElement.replaceChild(newChild, el);
+            el.parentElement.replaceChild(newChild, el);
+          }
         }
       }
     };
