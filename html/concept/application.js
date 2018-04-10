@@ -32,7 +32,11 @@ const methods = {
   showContent(options) {
     if (options.classContent === 'hideContent') {
       options.classContent = 'show';
-    } else options.classContent = 'hideContent';
+      options.textForShowHideButton = 'show less';
+    } else {
+      options.classContent = 'hideContent';
+      options.textForShowHideButton = 'show more';
+    }
     this._route(window.location.href, false); // rerender current page without hostory
   },
   goSearch(search, event) {
@@ -44,7 +48,6 @@ const methods = {
       startSearch = true;
     }
     if (startSearch) {
-      console.log(search);
       this._route(`/html/concept/search.html?query=${search}`);
     }
   },
@@ -87,6 +90,7 @@ const beforeRenderMain = (model, cb) => {
         data.newsToShow.options = {
           classContent: 'hideContent',
           classLink: 'show',
+          textForShowHideButton: 'show more',
         };
     }
 
