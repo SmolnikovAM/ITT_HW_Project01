@@ -70,11 +70,17 @@ img {
     width: 30%;
 }
 
-.search input{
-    width: 100%;
+.search input:first-child{
+    width: 85%;
     height: 30px;
     margin-bottom: 5px;
     border-radius: 5px;
+}
+
+.search input:last-child {
+    vertical-align: middle;
+    height: 30px;
+    width: 30px;
 }
 
 .banner > div:first-child {
