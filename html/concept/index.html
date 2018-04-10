@@ -73,9 +73,9 @@
 
 <script type="text/template" id="template_container-main">
 <div class="container">
-        <div class="main">
-           <component page="show-phones"></component>
-        </div>
+        <!-- <div class="main"> -->
+           <!-- <component page="show-phones"></component> -->
+        <!-- </div> -->
 
         <div>
             <div class="search">
@@ -121,10 +121,28 @@
     </header>
 
     <main>
-       <div class="main-articles">
+        <div class="container">
+
+        <div class="main-articles">
            <component if="showArticles"  foreach page="show-phones-iterate" data="main"></component>
            <component if="showCurrentArticle" page="show-phones-news" data="newsToShow"></component>
-       </div>
+        </div>
+
+        <div>
+            <div class="search">
+                <input type="search" 
+                       placeholder="Search..." 
+                       @keydown="goSearch(search)" 
+                       model="search">
+                <button @click="goSearch(search)">
+                        go</button>
+            </div>
+             
+            <div class="form">
+            </div>
+                <component page="advert"></component>
+            </div>
+        </div>
     </main>
 
     <footer>

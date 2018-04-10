@@ -169,22 +169,28 @@ class View {
           if (!modif) el.style.display = 'none';
         }
 
-        if (attName.indexOf('@click') >= 0) {
+        if (
+          attName.indexOf('@click') >= 0 ||
+          attName.indexOf('@keydown') >= 0
+        ) {
+          const eventMethod = attName.replace('@', '').trim();
           const paramName = el.attributes[key].value;
-
           const idx = paramName.indexOf('(');
           if (idx >= 0) {
             const methodName = paramName.slice(0, idx);
             const params = paramName
               .slice(idx)
               .replace(/[()\s]+/g, '')
-              .split(',')
-              .map(p => this.value(data, p));
-            el.addEventListener('click', e =>
-              methods[methodName](...params, e),
-            );
+              .split(',');
+
+            el.addEventListener(eventMethod, e => {
+              setTimeout(() => {
+                const evalParams = params.map(p => this.value(data, p));
+                methods[methodName](...evalParams, e);
+              }, 0);
+            });
           } else {
-            console.log(methods);
+            // console.log(methods);
             if (!Reflect.has(methods, paramName)) {
               throw new Error(`No such method ${paramName}`);
             }
@@ -395,12 +401,11 @@ class Router {
   }
   route(href, history = true, callback = () => {}) {
     const parse = this.parseURL(href);
+    // console.log(parse);
     const page = this.routerMap.find(x => x.pathname === parse.pathname);
     if (page === undefined) return;
     page.model.data.params = parse.params;
     const cb = () => {
-      // console.log(href, page);
-
       const renderPage = () => {
         if (history) {
           window.history.pushState({ href }, page.title, href);
@@ -439,8 +444,9 @@ class Router {
 // ----------------------------
 // eslint-disable-next-line
 class Controller {
-  constructor(methods) {
+  constructor(methods, model) {
     this.methods = methods;
+    this.methods._model = model;
     this.methods._route = (...e) => {
       console.log(...e);
     };

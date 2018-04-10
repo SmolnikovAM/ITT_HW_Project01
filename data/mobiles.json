@@ -1,5 +1,4 @@
-{
-  "1": {
+[ {
     "img": "img/shop/motorola.jpg",
     "name": "Motorola E398",
     "price": 69,
@@ -8,7 +7,7 @@
     "city": "Варна",
     "type": "продава"
   },
-  "2": {
+   {
     "img": "img/shop/blackberry.jpg",
     "name": "BlackBerry KEYone",
     "price": 870,
@@ -17,7 +16,7 @@
     "city": "София",
     "type": "продава"
   },
-  "3": {
+   {
     "img": "img/shop/huawei_p9.jpg",
     "name": "Huawei P9 lite dual sim",
     "price": 250,
@@ -26,7 +25,7 @@
     "city": "Кюстендил",
     "type": "продава"
   },
-  "4": {
+  {
     "img": "img/shop/iphone6+.jpg",
     "name": "Apple iPhone 6 Plus",
     "price": 479,
@@ -35,7 +34,7 @@
     "city": "София",
     "type": "продава"
   },
-  "5": {
+   {
     "img": "img/shop/iphone7.jpg",
     "name": "Apple iPhone 7",
     "price": 799,
@@ -44,7 +43,7 @@
     "city": "София",
     "type": "продава"
   },
-  "6": {
+   {
     "img": "img/shop/lg_optimus.jpg",
     "name": "LG Optimus One P500",
     "price": 120,
@@ -53,7 +52,7 @@
     "city": "София",
     "type": "купува"
   },
-  "7": {
+   {
     "img": "img/shop/nokia_old.jpg",
     "name": "Nokia N79",
     "price": 99,
@@ -62,7 +61,7 @@
     "city": "Бургас",
     "type": "продава"
   },
-  "8": {
+   {
     "img": "img/shop/samsung.jpg",
     "name": "Samsung B7722",
     "price": 69,
@@ -71,7 +70,7 @@
     "city": "София",
     "type": "продава"
   },
-  "9": {
+   {
     "img": "img/shop/samsung_galaxy_9.jpg",
     "name": "Samsung Galaxy S9 dual sim",
     "price": 1300,
@@ -80,7 +79,7 @@
     "city": "Варна",
     "type": "продава"
   },
-  "10": {
+   {
     "img": "img/shop/samsung_galaxy_ace.jpg",
     "name": "Samsung S6802 Galaxy Ace Duos",
     "price": 45,
@@ -89,4 +88,4 @@
     "city": "София",
     "type": "купува"
   }
-}
+]
