@@ -32,7 +32,7 @@
         <div class="container">
 
         <div class="main-articles">
-            element count: <stong>{{ searchList.length }} </strong>
+            element count: <strong>{{ searchList.length }} </strong>
             <ul>
            <component  foreach page="show-search-iterate" data="searchList"></component>
             </ul>
@@ -44,8 +44,7 @@
                        placeholder="Search..." 
                        @keydown="goSearch(search)" 
                        model="search">
-                <button @click="goSearch(search)">
-                        go</button>
+                <input src="../../img/right_search_ico.gif" type="image" @click="goSearch(search)"/>
             </div>
              
             <div class="form">
