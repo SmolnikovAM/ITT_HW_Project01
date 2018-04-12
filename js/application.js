@@ -127,6 +127,15 @@ const beforeRenderShop = (model, cb) => {
   loadContent('data/mobiles.json', data, 'shop', 'shopLoaded', cb);
 };
 
+const beforeRenderNews = (model, cb) => {
+  const { data } = model;
+  if (data.newsLoaded) {
+    cb();
+    return;
+  }
+  loadContent('data/news.json', data, 'news', 'newsLoaded', cb);
+};
+
 const storage = new Storage(storageData);
 const view = new View();
 
@@ -159,6 +168,13 @@ const router = new Router([
     model: modelMain,
     controller: controllerMainPage,
     beforeRender: beforeRenderShop,
+    startPage: false,
+  },
+  {
+    pathname: '/news.html',
+    model: modelMain,
+    controller: controllerMainPage,
+    beforeRender: beforeRenderNews,
     startPage: false,
   },
 ]);
