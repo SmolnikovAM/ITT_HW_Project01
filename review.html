@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="bg">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/news.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/review.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/shop.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css"/>
+
+    <title></title>
+</head>
+<body>
+
+<script type="text/template" id="template_iterate-phone-content">
+<div>
+    <h4>{{ title }}</h4>
+    <p>
+       {{ text }}
+    </p>
+</div>
+</script>
+
+<script type="text/template" id="template_show-phone-review">
+<div>
+    <h2 align="center">{{ title }}</h2>
+    <img :src="img" :alt="title">
+    <component foreach page="iterate-phone-content" data="text"></component>
+    <iframe :src="iframeSrc" width="100%" height="527" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+</script>
+
+
+<script type="text/template" id="template_pagination">
+    <div class="pagination">
+            <div>
+              <a :href="review.html?id={{reviewToShow.options.linkPrevios}}"> <strong> <<< </strong></a>
+            </div>
+            <div>
+               <a :href="review.html?id={{reviewToShow.options.linkNext}}"><strong>>>></strong></a>
+            </div>
+        </div>
+</script>
+
+<script type="text/template" id="template_/review.html">
+<div class="main-container">
+    <header>
+      <component page="banners"></component>
+      <component page="navigation"></component>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="review-articles">
+                <component page="pagination" ></component>
+                <component page="show-phone-review" data="reviewToShow"></component>
+                <component page="pagination" ></component>
+        </div>
+
+        <div class="form">
+            <component page="search"></component>
+            <component page="advert"></component>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <component page="footer"></component>
+    </footer>
+</div>
+</script>
+
+<script src="js/lib.js"></script>
+<script src="js/application.js"></script>
+</body>
+</html>
+

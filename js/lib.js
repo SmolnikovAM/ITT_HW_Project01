@@ -218,8 +218,10 @@ class View {
     );
     let newText = text;
     matchVars.forEach(param => {
-      const r = new RegExp(`{{\\s*${param}\\s*}}`, 'g');
-      newText = newText.replace(r, this.value(data, param));
+      const paramToRegExp = param.replace('[', '\\[').replace('.', '\\.');
+      const r = new RegExp(`{{\\s*${paramToRegExp}\\s*}}`, 'gi');
+      const textToReplace = this.value(data, param);
+      newText = newText.replace(r, textToReplace);
     });
     return newText;
   }

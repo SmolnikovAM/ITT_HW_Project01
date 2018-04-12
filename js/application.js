@@ -6,11 +6,9 @@ const storageData = {
 const dataMain = {
   main: {},
   mainLoaded: false,
-  news: {},
-  newsToShow: {},
+  reviews: {},
+  reviewToShow: {},
   newsLoaded: false,
-  showArticles: false,
-  showCurrentArticle: false,
   search: '',
   listOfPhones: [],
   listOfPhonesLoaded: false,
@@ -61,7 +59,6 @@ const beforeRenderSearch = (model, cb) => {
         x => x.name.toUpperCase().indexOf(data.params.query.toUpperCase()) >= 0,
       );
     }
-
     cb();
   };
 
@@ -83,40 +80,42 @@ const beforeRenderSearch = (model, cb) => {
 
 const beforeRenderMain = (model, cb) => {
   const { data } = model;
-  const updateData = () => {
-    if (data.newsLoaded && data.params.id) {
-      data.newsToShow = data.news[data.params.id];
-      if (!data.newsToShow.options)
-        data.newsToShow.options = {
-          classContent: 'hideContent',
-          classLink: 'show',
-          textForShowHideButton: 'show more',
-        };
-    }
-
-    cb();
-  };
-
-  if (data.params.id) {
-    data.showArticles = false;
-    data.showCurrentArticle = true;
-    // data.showSearch = false;
-    if (data.newsLoaded) {
-      updateData();
-      return;
-    }
-    loadContent('data/news.json', data, 'news', 'newsLoaded', updateData);
-    return;
-  }
-
-  data.showArticles = true;
-  data.showCurrentArticle = false;
-  //   data.showSearch = false;
   if (data.mainLoaded) {
     cb();
     return;
   }
   loadContent('data/main.json', data, 'main', 'mainLoaded', cb);
+};
+
+const beforeRenderReview = (model, cb) => {
+  const { data } = model;
+  let id = Number(data.params.id) || 1;
+
+  const updateData = () => {
+    const { length } = Object.keys(data.reviews);
+    if (id <= 0 || id > length) id = 1;
+    data.reviewToShow = data.reviews[id];
+    if (!data.reviewToShow.options)
+      data.reviewToShow.options = {
+        linkPrevios: id - 1 > 0 ? id - 1 : length,
+        linkNext: id + 1 <= length ? id + 1 : 1,
+      };
+    cb();
+  };
+
+  if (id > 0) {
+    if (data.reviewsLoaded) {
+      updateData();
+      return;
+    }
+    loadContent(
+      'data/review.json',
+      data,
+      'reviews',
+      'reviewsLoaded',
+      updateData,
+    );
+  }
 };
 
 const storage = new Storage(storageData);
@@ -137,6 +136,13 @@ const router = new Router([
     model: modelMain,
     controller: controllerMainPage,
     beforeRender: beforeRenderSearch,
+    startPage: false,
+  },
+  {
+    pathname: '/review.html',
+    model: modelMain,
+    controller: controllerMainPage,
+    beforeRender: beforeRenderReview,
     startPage: false,
   },
 ]);
