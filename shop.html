@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="bg">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/shop.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css"/>
+
+    <title>Борса</title>
+</head>
+<body>
+
+
+<script type="text/template" id="template_show-shop-iterate">
+    <div>
+        <div>
+            <img :src="img" :alt="name"/>
+        </div>
+        <div class="info">
+            <div>
+                <div>име</div>
+                <div class="name">{{name}}</div>
+            </div>
+            <div>
+                <div>цена</div>
+                <div class="price">{{price}}</div>
+            </div>
+            <div>
+                <div>гаранция</div>
+                <div>{{warranty}}</div>
+            </div>
+            <div>
+                <div>контакт</div>
+                <div class="contact">{{contact}}</div>
+            </div>
+            <div>
+                <div>град</div>
+                <div>{{city}}</div>
+            </div>
+            <div>
+                <div>тип на обява</div>
+                <div>{{type}}</div>
+            </div>
+            <div>
+                <div></div>
+                <div>
+                    <button class="btn">запази</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--<script type="text/template" id="template_pagination">-->
+    <!--<div class="pagination">-->
+        <!--<div>-->
+            <!--<a :href="shop.html?id={{reviewToShow.options.linkPrevios}}"> <strong> <<< </strong></a>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<a :href="review.html?id={{reviewToShow.options.linkNext}}"><strong>>>></strong></a>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</script>-->
+
+<script type="text/template" id="template_/shop.html">
+    <div class="main-container">
+        <header>
+            <component page="banners"></component>
+            <component page="navigation"></component>
+        </header>
+        <main>
+            <div class="container">
+                <div class="shop-main">
+                    <component foreach page="show-shop-iterate" data="shop"></component>
+                    <!--<component page="show-phone-shop" data="reviewToShow"></component>-->
+                    <!--<component page="pagination" ></component>-->
+                </div>
+
+                <div class="form">
+                    <component page="search"></component>
+                    <component page="advert"></component>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <component page="footer"></component>
+        </footer>
+    </div>
+</script>
+
+
+<script src="js/lib.js"></script>
+<script src="js/application.js"></script>
+</body>
+</html>
+

@@ -118,6 +118,15 @@ const beforeRenderReview = (model, cb) => {
   }
 };
 
+const beforeRenderShop = (model, cb) => {
+  const { data } = model;
+  if (data.shopLoaded) {
+    cb();
+    return;
+  }
+  loadContent('data/mobiles.json', data, 'shop', 'shopLoaded', cb);
+};
+
 const storage = new Storage(storageData);
 const view = new View();
 
@@ -143,6 +152,13 @@ const router = new Router([
     model: modelMain,
     controller: controllerMainPage,
     beforeRender: beforeRenderReview,
+    startPage: false,
+  },
+  {
+    pathname: '/shop.html',
+    model: modelMain,
+    controller: controllerMainPage,
+    beforeRender: beforeRenderShop,
     startPage: false,
   },
 ]);
