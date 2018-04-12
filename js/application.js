@@ -48,7 +48,7 @@ const methods = {
       startSearch = true;
     }
     if (startSearch) {
-      this._route(`/html/concept/search.html?query=${search}`);
+      this._route(`search.html?query=${search}`);
     }
   },
 };
@@ -71,7 +71,7 @@ const beforeRenderSearch = (model, cb) => {
       return;
     }
     loadContent(
-      '../../data/mobiles.json',
+      'data/mobiles.json',
       data,
       'listOfPhones',
       'listOfPhonesLoaded',
@@ -105,7 +105,7 @@ const beforeRenderMain = (model, cb) => {
       updateData();
       return;
     }
-    loadContent('../../data/news.json', data, 'news', 'newsLoaded', updateData);
+    loadContent('data/news.json', data, 'news', 'newsLoaded', updateData);
     return;
   }
 
@@ -116,7 +116,7 @@ const beforeRenderMain = (model, cb) => {
     cb();
     return;
   }
-  loadContent('../../data/main.json', data, 'main', 'mainLoaded', cb);
+  loadContent('data/main.json', data, 'main', 'mainLoaded', cb);
 };
 
 const storage = new Storage(storageData);
@@ -126,14 +126,14 @@ const modelMain = new Model(dataMain, storage);
 const controllerMainPage = new Controller(methods, modelMain);
 const router = new Router([
   {
-    pathname: '/html/concept/index.html',
+    pathname: '/index.html',
     model: modelMain,
     controller: controllerMainPage,
     beforeRender: beforeRenderMain,
     startPage: true,
   },
   {
-    pathname: '/html/concept/search.html',
+    pathname: '/search.html',
     model: modelMain,
     controller: controllerMainPage,
     beforeRender: beforeRenderSearch,
