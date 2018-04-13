@@ -182,12 +182,27 @@ img {
     padding: 5px;
 }
 
-.form > div  > input, .btn {
+.form > div  > input, .btn, .form  a{
     margin-left: auto;
     margin-right: auto;
     height: 30px;
-    /*width: 55%;*/
+    width: 55%;
     border-radius: 5px;
+}
+
+.form  a {
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+}
+
+fieldset {
+    margin: 10px 0;
+    padding: 20px;
+    background-color: #EEEEEE;
 }
 
 .btn.login {
@@ -202,11 +217,20 @@ background-color: aqua;
     margin-bottom: 5px;
 }
 
-.form > p {
+.form {
     text-align: center;
+    margin-bottom: 10px;
+}
+
+.form > p , legend{
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 16px;
     font-weight: bold;
+}
+
+.form > a{
+    background-color: #EEEEEE;
+    font-size: larger;
 }
 
 footer {
