@@ -19,6 +19,7 @@ class Application {
       route.render = () =>
         view.createRenderFunction({ model, controller })(pathname);
       controller.methods._route = router.startRouting(view);
+      controller.methods._router = router;
     });
     if (beginFromStartPage) {
       const displayBefore = view.HTMLRoot.style.visibility;
@@ -163,7 +164,7 @@ class View {
         }
 
         if (attName === 'if') {
-          const modif = this.value(data, param, false, true, false);
+          const modif = this.value(data, param);
           // console.log(el, modif);
           // eslint-disable-next-line
           if (!modif) el.style.display = 'none';
@@ -254,9 +255,11 @@ class View {
         const page = el.attributes.page.value;
         let goInside = true;
         if (Reflect.has(el.attributes, 'if')) {
-          if (!Reflect.has(data, el.attributes.if.value))
+          const modif = this.value(data, el.attributes.if.value);
+          console.log(el.attributes.if.value, modif);
+          if (modif === undefined)
             throw new Error(`No such field in data ${el.attributes.if.value}`);
-          if (!data[el.attributes.if.value]) goInside = false;
+          goInside = modif;
         }
 
         if (goInside) {
@@ -348,6 +351,7 @@ class View {
 class Router {
   constructor(routerMap = []) {
     this.routerID = Symbol('routerID');
+    this.currentPage = '';
     this.routerMap = routerMap.map(
       ({ pathname, model, startPage, controller, beforeRender }) => ({
         pathname,
@@ -401,6 +405,11 @@ class Router {
       params,
     };
   }
+
+  refresh() {
+    this.route(this.currentPage, false);
+  }
+
   route(href, history = true, callback = () => {}) {
     const parse = this.parseURL(href);
     // console.log(parse);
@@ -412,6 +421,7 @@ class Router {
         if (history) {
           window.history.pushState({ href }, page.title, href);
         }
+        this.currentPage = href;
         page.render();
         // console.log('render');
         callback();
@@ -469,20 +479,29 @@ class Storage {
     const mainData = {};
     const _mainData = {};
 
+    // document.addEventListener('DOMContentLoaded', onLoad);
+    // window.addEventListener('storage', () => this.loadFromStorage());
+    // -----------test mode
+    window.localStorage.clear();
+    // -----------test mode
+
     this.mainData = mainData;
     this._mainData = _mainData;
     Object.keys(inputData).forEach(key => {
-      this._mainData[key] = inputData[key];
-      if (Reflect.has(window.localStorage, 'key')) {
-        this._mainData[key] = window.localStorage.getItem(key);
+      if (Reflect.has(window.localStorage, key)) {
+        this._mainData[key] = JSON.parse(window.localStorage.getItem(key));
+      } else {
+        const json = JSON.stringify(inputData[key]);
+        window.localStorage.setItem(key, json);
+        this._mainData[key] = JSON.parse(json);
       }
       Object.defineProperty(mainData, key, {
         get() {
           return _mainData[key];
         },
         set(val) {
-          window.localStorage.setItem(key, val);
-          const valReturn = window.localStorage.getItem(key);
+          window.localStorage.setItem(key, JSON.stringify(val));
+          const valReturn = JSON.parse(window.localStorage.getItem(key));
           _mainData[key] = valReturn;
         },
         enumerable: true,
@@ -493,7 +512,7 @@ class Storage {
   loadFromStorage() {
     Object.keys(this._mainData).forEach(key => {
       if (Reflect.has(window.localStorage, 'key')) {
-        this._mainData[key] = window.localStorage.getItem(key);
+        this._mainData[key] = JSON.parse(window.localStorage.getItem(key));
       }
     });
   }

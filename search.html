@@ -5,23 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" media="screen" href="../../css/news.css"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="../../css/review.css"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="../../css/shop.css"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="../../css/styles.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/news.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/review.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/shop.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/styles.css" />
 
     <title></title>
 </head>
+
 <body>
 
 
-<script type="text/template" id="template_show-search-iterate">
+    <script type="text/template" id="template_show-search-iterate">
     <li>
         {{ name }}
     </li>
 </script>
 
-<script type="text/template" id="template_/search.html">
+    <script type="text/template" id="template_/search.html">
 <div class="main-container">
     <header>
       <component page="banners"></component>
@@ -38,7 +39,6 @@
             </ul>
         </div>
 
-        <div>
             <div class="search">
                 <input type="search" 
                        placeholder="Search..." 
@@ -47,11 +47,7 @@
                 <input src="img/right_search_ico.gif" type="image" @click="goSearch(search)"/>
             </div>
              
-            <div class="form">
-            </div>
-                <component page="advert"></component>
-            </div>
-        </div>
+            <component page="right-form"></component>
     </main>
 
     <footer>
@@ -60,8 +56,8 @@
 </div>
 </script>
 
-<script src="js/lib.js"></script>
-<script src="js/application.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/application.js"></script>
 </body>
-</html>
 
+</html>

@@ -5,18 +5,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/news.css"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="css/review.css"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="css/shop.css"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/news.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/review.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/shop.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css" />
 
     <title>Начало</title>
 </head>
+
 <body>
 
 
+    <script type="text/template" id="template_login">
+    <form onSubmit="return false">
+        <div class="sign form">
+            <div>
+                <label>Username</label>
+                <input type="text" minlength="3" name="username" model="loginPanel.login"/>
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="password" minlength="3" name="username" model="loginPanel.password"/>
+            </div>
+            <div>
+                <button class="btn login" @click="loginCheck">sign in</button>
+            </div>
+            <div style="color:red">
+                {{  loginPanel.loginErrorText }}
+            </div>
+        </div>
+    </form>
+</script>
 
-<script type="text/template" id="template_banners">
+
+    <script type="text/template" id="template_register">
+    <form onSubmit="return false">
+            <div class="register form">
+                <div>
+                    <label>Username</label>
+                    <input type="text" minlength="3" name="username" 
+                          model="registerPanel.login"/>
+                </div>
+        
+                <div>
+                        <label>Name</label>
+                        <input type="text" minlength="3" name="username"
+                        model="registerPanel.name"/>
+                    </div>
+
+                <div>
+                    <label>Password</label>
+                    <input type="password" minlength="7" name="password"
+                    model="registerPanel.password1"/>
+                </div>
+                <div>
+                    <label>Repeat Password</label>
+                    <input type="password" minlength="7" name="repeatPassword"
+                    model="registerPanel.password2"/>
+                </div>
+                <div>
+                    <button class="btn register" type="submit" @click="register">register</button>
+                </div>
+                <div style="color:red">
+                        {{  registerPanel.registerErrorText }}
+                    </div>
+            </div>
+        </form>
+
+</script>
+
+
+    <script type="text/template" id="template_banners">
     <div class="banner">
         <div><img src="img/banner.jpg"></div>
         <div><a href="#"><img src="img/fb.jpg"></a></div>
@@ -27,7 +86,7 @@
     </div>
 </script>
 
-<script type="text/template" id="template_navigation">
+    <script type="text/template" id="template_navigation">
 <div class="nav-container">
         <div class="nav">
             <div><a href="index.html">начало</a></div>
@@ -36,13 +95,15 @@
             <div><a href="shop.html">борса</a></div>
         </div>
         <div class="userinput">
-            <div><a href="#">Вход</a></div>
-            <div><a href="#">Регистрация</a></div>
+            <div if="mainData.auth.notAuth"><a href="#" @click="startAuth">Вход</a></div>
+            <div if="mainData.auth.notAuth"><a href="#" @click="startRegister" >Регистрация</a></div>
+            <div if="mainData.auth.isAuth">{{ mainData.auth.name }}</div>
+            <div if="mainData.auth.isAuth"><a href="#" @click="logout">Логаут</a></div>
         </div>
     </div>
 </script>
 
-<script type="text/template" id="template_footer">
+    <script type="text/template" id="template_footer">
         <div>
             <div class="social">
                 <div><a href="#"><img src="img/footer_ico_facebook.jpg"></a></div>
@@ -57,9 +118,9 @@
                 <p>Конфиденциалност · Общи условия</p>
             </div>
         </div>
-</script>    
+</script>
 
-<script type="text/template" id="template_advert">
+    <script type="text/template" id="template_advert">
     <div id="advert">
             <a target="_blank"
                href="https://sportaladbg.hit.gemius.pl/hitredir/id=cirlpIOySQBlAZe_x.ZXQrcdPzMkWDrin3II4LgiAmj.M7/stparam=omqtpvhibc/fastid=aqlzcdwlnoaqmlnqqjvmkxkqsnmv/sarg=58DFFEFAB0E3EFC5%7C_cdata%3A380695_0%2C897843_0/url=https%3A%2F%2Fwww.facebook.com%2Fgroups%2Fnikeplusrunclubsofia%2F%3Fref%3Dgroup_header%23_%3D_"
@@ -70,27 +131,7 @@
         </div>
 </script>
 
-
-<script type="text/template" id="template_container-main">
-<div class="container">
-        <!-- <div class="main"> -->
-           <!-- <component page="show-phones"></component> -->
-        <!-- </div> -->
-
-        <div>
-            <div class="search">
-                <input type="search" placeholder="Search...">
-                <input src="img/right_search_ico.gif" type="image">
-            </div>
-         
-            <div class="form">
-            </div>
-              <component page="advert"></component>
-        </div>
-    </div>
-</script>
-
-<script type="text/template" id="template_show-phones-iterate">
+    <script type="text/template" id="template_show-phones-iterate">
     <div>
         <img :src="img"/>
         <div class="content">
@@ -99,7 +140,7 @@
     </div>
 </script>
 
-<script type="text/template" id="template_search">
+    <script type="text/template" id="template_search">
     <div class="search">
         <input type="search" 
             placeholder="Search..." 
@@ -109,8 +150,18 @@
     </div>
 </script>
 
+    <script type="text/template" id="template_right-form">
 
-<script type="text/template" id="template_/index.html">
+<div class="form">
+        <component if="loginPanel.showLoginPanel" page="login"></component>
+        <component if="registerPanel.showRegisterPanel" page="register"></component>
+        <component page="search"></component>
+        <component page="advert"></component>
+</div>
+</script>
+
+
+    <script type="text/template" id="template_/index.html">
 <div class="main-container">
     <header>
       <component page="banners"></component>
@@ -124,10 +175,7 @@
            <component foreach page="show-phones-iterate" data="main"></component>
         </div>
 
-        <div class="form">
-                <component page="search"></component>
-                <component page="advert"></component>
-        </div>
+        <component page="right-form"></component>
 
     </div>
     </main>
@@ -138,8 +186,8 @@
 </div>
 </script>
 
-<script src="js/lib.js"></script>
-<script src="js/application.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/application.js"></script>
 </body>
-</html>
 
+</html>

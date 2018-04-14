@@ -1,42 +1,114 @@
 const storageData = {
-  login: 'userlogin',
-  userName: 'Andrei',
+  loadedData: {
+    users: false,
+    usersPath: 'data/auth.json',
+    review: false,
+    reviewPath: 'data/review.json',
+    listOfPhones: false,
+    listOfPhonesPath: 'data/mobiles.json',
+    newsPath: 'data/news.json',
+    news: false,
+  },
+  auth: {
+    isAuth: false,
+    notAuth: true,
+    isAdmin: false,
+    name: '',
+  },
+  users: {},
+  review: {},
+  news: {},
+  listOfPhones: {},
 };
 
 const dataMain = {
   main: {},
-  mainLoaded: false,
-  reviews: {},
-  reviewToShow: {},
-  newsLoaded: false,
+  loginPanel: {
+    login: '',
+    showLoginPanel: false,
+    password: '',
+    loginErrorText: '',
+  },
+  registerPanel: {
+    showRegisterPanel: false,
+    login: '',
+    name: '',
+    password1: '',
+    password2: '',
+    registerErrorText: '',
+  },
   search: '',
-  listOfPhones: [],
-  listOfPhonesLoaded: false,
-  searchList: [],
-  showSearch: false,
 };
 
-function loadContent(file, data, field, fieldBool, cb) {
-  fetch(file)
-    .then(res => res.text())
-    .then(res => {
-      data[field] = JSON.parse(res);
-      data[fieldBool] = true;
-      cb();
-    });
-}
-
 const methods = {
-  showContent(options) {
-    if (options.classContent === 'hideContent') {
-      options.classContent = 'show';
-      options.textForShowHideButton = 'show less';
-    } else {
-      options.classContent = 'hideContent';
-      options.textForShowHideButton = 'show more';
-    }
-    this._route(window.location.href, false); // rerender current page without hostory
+  startAuth() {
+    const { data } = this._model;
+    data.loginPanel.showLoginPanel = true;
+    data.registerPanel.showRegisterPanel = false;
+    this._router.refresh();
   },
+  logout() {
+    const { data } = this._model;
+    data.loginPanel.loginErrorText = '';
+    data.mainData.auth = storageData.auth;
+    data.loginPanel.showLoginPanel = false;
+    data.registerPanel.showRegisterPanel = false;
+    this._router.refresh();
+  },
+  startRegister() {
+    const { data } = this._model;
+    data.loginPanel.showLoginPanel = false;
+    data.registerPanel.showRegisterPanel = true;
+
+    this._router.refresh();
+  },
+  loginCheck() {
+    const { data } = this._model;
+    const user = data.mainData.users.find(
+      x =>
+        x.password === data.loginPanel.password &&
+        x.login === data.loginPanel.login,
+    );
+    data.password = '';
+    if (user) {
+      data.loginPanel.showLoginPanel = false;
+      data.mainData.auth = user;
+      data.loginPanel.loginErrorText = '';
+    } else {
+      data.loginPanel.loginErrorText = 'NOT found';
+      data.mainData.auth = storageData.auth;
+    }
+    this._router.refresh();
+  },
+
+  register() {
+    const { data } = this._model;
+    const { registerPanel } = data;
+    const { login, name, password1, password2 } = registerPanel;
+    if (data.mainData.users.find(x => x.login === login)) {
+      registerPanel.registerErrorText = 'already have such login';
+      this._router.refresh();
+      return;
+    }
+
+    if (password1 !== password2) {
+      registerPanel.registerErrorText = 'passwords are not equal';
+      this._router.refresh();
+      return;
+    }
+
+    const user = {
+      login,
+      name,
+      password: password1,
+      isAuth: true,
+      notAuth: false,
+      isAdmin: false,
+    };
+
+    data.mainData.users = [...data.mainData.users, user];
+  },
+
   goSearch(search, event) {
     let startSearch = false;
     if (event instanceof KeyboardEvent && event.code === 'Enter') {
@@ -49,91 +121,89 @@ const methods = {
       this._route(`search.html?query=${search}`);
     }
   },
+  showContent(options) {
+    if (options.classContent === 'hideContent') {
+      options.classContent = 'show';
+      options.textForShowHideButton = 'show less';
+    } else {
+      options.classContent = 'hideContent';
+      options.textForShowHideButton = 'show more';
+    }
+    this._route(window.location.href, false); // rerender current page without hostory
+  },
+};
+
+function loadToStorage(model, dataName) {
+  const { storage } = model;
+  if (storage.mainData.loadedData[dataName]) {
+    return new Promise(res => res());
+  }
+  return fetch(storage.mainData.loadedData[`${dataName}Path`])
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      storage.mainData[dataName] = res;
+      storage.mainData.loadedData[dataName] = true;
+    });
+}
+
+const beforeRenderMain = (model, cb) => {
+  const { data } = model;
+
+  loadToStorage(model, 'review')
+    .then(() => loadToStorage(model, 'users'))
+    .then(() => {
+      let i = 1;
+      const keyData = Object.keys(data.mainData.review);
+      while (i < 5 && keyData.length > i) {
+        data.main[i] = data.mainData.review[keyData[i]];
+        i += 1;
+      }
+    })
+    .then(cb);
 };
 
 const beforeRenderSearch = (model, cb) => {
   const { data } = model;
-  const updateData = () => {
-    if (data.listOfPhonesLoaded && data.params.query) {
-      data.searchList = data.listOfPhones.filter(
-        x => x.name.toUpperCase().indexOf(data.params.query.toUpperCase()) >= 0,
-      );
-    }
-    cb();
-  };
-
-  if (data.params.query) {
-    if (data.listOfPhonesLoaded) {
-      updateData();
-      return;
-    }
-    loadContent(
-      'data/mobiles.json',
-      data,
-      'listOfPhones',
-      'listOfPhonesLoaded',
-      updateData,
-    );
-    return;
-  }
-};
-
-const beforeRenderMain = (model, cb) => {
-  const { data } = model;
-  if (data.mainLoaded) {
-    cb();
-    return;
-  }
-  loadContent('data/main.json', data, 'main', 'mainLoaded', cb);
+  loadToStorage(model, 'listOfPhones')
+    .then(() => {
+      if (data.params.query) {
+        data.searchList = data.mainData.listOfPhones.filter(
+          x =>
+            x.name.toUpperCase().indexOf(data.params.query.toUpperCase()) >= 0,
+        );
+      }
+    })
+    .then(cb);
 };
 
 const beforeRenderReview = (model, cb) => {
   const { data } = model;
+  const { mainData } = data;
   let id = Number(data.params.id) || 1;
 
-  const updateData = () => {
-    const { length } = Object.keys(data.reviews);
-    if (id <= 0 || id > length) id = 1;
-    data.reviewToShow = data.reviews[id];
-    if (!data.reviewToShow.options)
-      data.reviewToShow.options = {
-        linkPrevios: id - 1 > 0 ? id - 1 : length,
-        linkNext: id + 1 <= length ? id + 1 : 1,
-      };
-    cb();
-  };
-
-  if (id > 0) {
-    if (data.reviewsLoaded) {
-      updateData();
-      return;
-    }
-    loadContent(
-      'data/review.json',
-      data,
-      'reviews',
-      'reviewsLoaded',
-      updateData,
-    );
-  }
+  loadToStorage(model, 'review')
+    .then(() => {
+      const { length } = Object.keys(mainData.review);
+      if (id <= 0 || id > length) id = 1;
+      data.reviewToShow = mainData.review[id];
+      if (!data.reviewToShow.options)
+        data.reviewToShow.options = {
+          linkPrevios: id - 1 > 0 ? id - 1 : length,
+          linkNext: id + 1 <= length ? id + 1 : 1,
+        };
+    })
+    .then(cb);
 };
 
 const beforeRenderShop = (model, cb) => {
   const { data } = model;
-  if (data.shopLoaded) {
-    cb();
-    return;
-  }
-  loadContent('data/mobiles.json', data, 'shop', 'shopLoaded', cb);
+  loadToStorage(model, 'listOfPhones').then(cb);
 };
 
 const beforeRenderNews = (model, cb) => {
   const { data } = model;
-  if (data.newsLoaded) {
-    cb();
-    return;
-  }
-  loadContent('data/news.json', data, 'news', 'newsLoaded', cb);
+  loadToStorage(model, 'news').then(cb);
 };
 
 const storage = new Storage(storageData);
