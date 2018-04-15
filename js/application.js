@@ -125,7 +125,7 @@ const methods = {
       data.mainData.auth = user;
       data.loginPanel.loginErrorText = '';
     } else {
-      data.loginPanel.loginErrorText = 'NOT found';
+      data.loginPanel.loginErrorText = 'Invalid Credentials';
       data.mainData.auth = storageData.auth;
     }
     this._router.refresh();
@@ -136,7 +136,7 @@ const methods = {
     const { registerPanel } = data;
     const { login, name, password1, password2 } = registerPanel;
     if (data.mainData.users.find(x => x.login === login)) {
-      registerPanel.registerErrorText = 'already have such login';
+      registerPanel.registerErrorText = 'username  exists';
       this._router.refresh();
       return;
     }

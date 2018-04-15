@@ -8,6 +8,12 @@
     width: 100%
 }
 
+.review-articles > div  img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
 .pagination {
     display: flex;
     flex-direction: row;

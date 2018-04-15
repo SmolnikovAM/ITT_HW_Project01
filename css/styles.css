@@ -71,7 +71,7 @@ img {
 }
 
 .search input:first-child{
-    width: 85%;
+    width: 84%;
     height: 30px;
     margin-bottom: 5px;
     border-radius: 5px;
@@ -95,15 +95,16 @@ img {
 }
 
 .userinput > div {
-    width: 50%;
+    width: 100%;
+    font-size: 15px;
+}
+
+.userinput > div {
+    background-color: darksalmon;
 }
 
 .userinput > div:first-child {
     background-color: aqua;
-}
-
-.userinput > div:last-child {
-    background-color: darksalmon;
 }
 
 .container {
@@ -132,14 +133,15 @@ img {
 .main-articles img {
     display: block;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
+    height: 100%;
 }
 
 .main-articles > div {
     position: relative;
     flex-grow: 1;
-    width: 50%;
-    margin-bottom: 15px;
+    width: 49%;
+    margin: 1px;
 }
 
 .content {
@@ -182,6 +184,14 @@ img {
     padding: 5px;
 }
 
+#user {
+    text-align: center;
+}
+
+.form > div > a {
+    height: 400px;
+    width: 100%;
+}
 .form > div  > input, .btn, .form  a{
     margin-left: auto;
     margin-right: auto;
@@ -292,3 +302,6 @@ footer p {
     height: 30px;
 }
 
+label {
+    font-size: 13px;
+}
