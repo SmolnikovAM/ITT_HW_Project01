@@ -319,12 +319,11 @@ const beforeRenderMain = (model, cb) => {
   loadToStorage(model, 'review')
     .then(() => loadToStorage(model, 'users'))
     .then(() => {
-      let i = 1;
-      const keyData = Object.keys(data.mainData.review);
-      while (i < 5 && keyData.length > i) {
-        data.main[i] = data.mainData.review[keyData[i]];
-        i += 1;
-      }
+      data.main = data.mainData.review.filter((_, index) => index < 4);
+      // while (i < 5 && keyData.length > i) {
+      //   data.main[i] = data.mainData.review[keyData[i]];
+      //   i += 1;
+      // }
     })
     .then(cb);
 };
@@ -358,19 +357,12 @@ const beforeRenderReview = (model, cb) => {
         id = ids[p];
       }
 
-      data.reviewToShow = mainData.review[id];
+      data.reviewToShow = mainData.review.find(x => x.id === id);
 
       data.reviewToShow.options = {
         linkPrevious: ids[p - 1 < 0 ? len - 1 : p - 1],
         linkNext: ids[p + 1 >= len ? 0 : p + 1],
       };
-      // if (id <= 0 || id > length) id = 1;
-      // data.reviewToShow = mainData.review[id];
-      // if (!data.reviewToShow.options)
-      //   data.reviewToShow.options = {
-      //     linkPrevious: id - 1 > 0 ? id - 1 : length,
-      //     linkNext: id + 1 <= length ? id + 1 : 1,
-      //   };
     })
     .then(cb);
 };
@@ -400,7 +392,6 @@ const beforeRenderAdmin = (model, cb) => {
 
 function MAIN() {
   const storage = new Storage(storageData);
-  console.log('storage created');
   const view = new View();
 
   const modelMain = new Model(dataMain, storage);
@@ -472,6 +463,7 @@ function MAIN() {
   ]);
 
   const app = new Application({ view, router, beginFromStartPage: true });
+  window.app = app;
 }
 
 window.addEventListener('DOMContentLoaded', MAIN);

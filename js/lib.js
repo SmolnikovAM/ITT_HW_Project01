@@ -28,6 +28,7 @@ class Application {
       controller.methods._router = router;
     });
     if (beginFromStartPage) {
+      console.log('test 0');
       // const displayBefore = view.HTMLRoot.style.visibility;
       const displayBefore = '';
       if (!startPageRoute) throw new Error('You have to select startPage');
@@ -39,10 +40,11 @@ class Application {
         window.location.port ? ':' + window.location.port : ''
       }${startPageRoute}`;
 
+      console.log(startPageRoute);
       router.route(startPageRoute, false, () => {
-        // console.log('test cb 1');
+        console.log('test cb 1');
         router.route(destination, false, () => {
-          // console.log('test cb 2');
+          console.log('test cb 2');
           view.HTMLRoot.style.visibility = displayBefore;
         });
       });
@@ -369,6 +371,7 @@ class Router {
   constructor(routerMap = []) {
     this.routerID = Symbol('routerID');
     this.currentPage = '';
+    this.startUpdating = false;
     this.routerMap = routerMap.map(
       ({ pathname, model, startPage, controller, beforeRender }) => ({
         pathname,
@@ -435,6 +438,7 @@ class Router {
     // this.startPage.render();
   }
   route(href, history = true, callback = () => {}) {
+    this.startUpdating = true;
     const parse = this.parseURL(href);
     // console.log(parse);
     const page = this.routerMap.find(x => x.pathname === parse.pathname);
@@ -448,6 +452,7 @@ class Router {
         this.currentPage = href;
         page.render();
         // console.log('render');
+        this.startUpdating = false;
         callback();
       };
       if (
@@ -506,7 +511,7 @@ class Storage {
     // document.addEventListener('DOMContentLoaded', onLoad);
 
     // -----------test mode
-    window.localStorage.clear();
+    // window.localStorage.clear();
     // -----------test mode
 
     this.mainData = mainData;
@@ -539,7 +544,10 @@ class Storage {
 
     window.addEventListener('storage', () => {
       this.loadFromStorage();
-      if (Reflect.has(this, '_router')) {
+      if (
+        Reflect.has(this, '_router') &&
+        this._router.startUpdating === false
+      ) {
         // console.log('refresh');
         this._router.refresh();
       }
