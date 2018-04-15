@@ -1,5 +1,5 @@
-{
-  "3": {
+[
+  {
     "title": "HTC U11 Life",
     "img": "/img/review/1.jpg",
     "text": [
@@ -32,7 +32,7 @@
     "iframeSrc": "https://www.youtube.com/embed/4U1MZYwpIto",
     "id": 3
   },
-  "1": {
+  {
     "title": "Huawei Mate 10 Pro",
     "img": "/img/review/2.jpg",
     "text": [
@@ -60,7 +60,7 @@
     "iframeSrc": "https://www.youtube.com/embed/NSZl9ZyOCto",
     "id": 1
   },
-  "2": {
+  {
     "title": "Huawei P Smart",
     "img": "/img/review/3.jpg",
     "text": [
@@ -83,7 +83,7 @@
     "iframeSrc": "https://www.youtube.com/embed/mMvYQPhV4m4",
     "id": 2
   },
-  "4": {
+  {
     "title": "Motorola Moto Z2",
     "img": "/img/review/4.jpg",
     "text": [
@@ -106,7 +106,7 @@
     "iframeSrc": "https://www.youtube.com/embed/LoiHLMgpmJ8",
     "id": 4
   },
-  "5": {
+  {
     "title": "Samsung Galaxy S9",
     "img": "/img/review/5.jpg",
     "text": [
@@ -129,7 +129,7 @@
     "iframeSrc": "https://www.youtube.com/embed/5_-NKRVn7IQ",
     "id": 5
   },
-  "6": {
+  {
     "title": "Sony Xperia XZ1",
     "img": "/img/review/6.jpg",
     "text": [
@@ -147,4 +147,4 @@
     "iframeSrc": "https://www.youtube.com/embed/SbJUoSx_0uo",
     "id": 6
   }
-}
+]

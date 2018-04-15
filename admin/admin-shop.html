@@ -19,39 +19,82 @@
     <script type="text/template" id="template_add-shop">
         <div class="container">
             <div class="admin-news">
-                <form>
+                <div class="admin-form">
                     <div>
-                        <input class="admin-input" placeholder="Enter Model Name" type="text">
+                        <input 
+                          class="admin-input" 
+                          placeholder="Enter Model Name" 
+                          type="text"
+                          model="editShop.name">
                     </div>
                     <div>
-                        <input class="admin-input" placeholder="Enter Image URL" type="url">
+                        <input 
+                        class="admin-input" 
+                        placeholder="Enter Image URL" 
+                        type="url"
+                        model="editShop.img">
                     </div>
                     <div>
-                        <input class="admin-input" placeholder="Enter Price" type="number">
+                        <input 
+                        class="admin-input"
+                         placeholder="Enter Price" 
+                         type="number"
+                         model="editShop.price">
                     </div>
                     <div>
-                        <input class="admin-input" placeholder="Enter Warranty" type="text">
+                        <input 
+                        class="admin-input" 
+                        placeholder="Enter Warranty" 
+                        type="text"
+                        model="editShop.warranty">
                     </div>
                     <div>
-                        <input class="admin-input" placeholder="Enter Contact" type="email">
+                        <input 
+                        class="admin-input"
+                        placeholder="Enter Contact" 
+                        type="email"
+                        model="editShop.contact">
                     </div>
                     <div>
-                        <input class="admin-input" placeholder="Enter City" type="email">
+                        <input 
+                        class="admin-input" 
+                        placeholder="Enter City"
+                         type="email"
+                         model="editShop.city">
                     </div>
                     <div>
-                        <select class="admin-input" placeholder="Choose Type">
-                            <option value="sell">Купува</option>
-                            <option value="buy">Продава</option>
+                        <select 
+                         class="admin-input" 
+                         placeholder="Choose Type"
+                         model="editShop.type">
+                            <option value="Купува">Купува</option>
+                            <option value="Продава">Продава</option>
                         </select>
                     </div>
                     <div>
-                        <button class="admin-btn">Добави</button>
+                        <button if="editShop.isAdd" 
+                           class="admin-btn"
+                           @click="addShop">Добави</button>
+                        <button if="editShop.isEdit" 
+                           @click="updateShop(editShop.id)" 
+                           class="admin-btn">Обнови</button>
+                        <button if="editShop.isEdit" 
+                           class="admin-btn"
+                           @click="updateShopCancel">Отмени</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </script>
 
+
+    <script type="text/template" id="template_all-shop">
+        <div class="admin-news-iterate">
+          {{ id }}  -- {{ name }} 
+          <button @click="deleteShop(id)">Delete news</button>
+          <button @click="editShop(id)">Edit news</button>
+       </div>
+  </script>
 
     <script type="text/template" id="template_/admin/admin-shop.html">
         <div class="main-container">
@@ -61,7 +104,11 @@
             </header>
             <main>
               <div class="container-admin">
-                
+                <div class="admin-news">  
+                    <component foreach 
+                       page="all-shop" 
+                       data="mainData.listOfPhones"></component>
+                  </div>
                 <component page="add-shop"></component>
               </div>
             </main>

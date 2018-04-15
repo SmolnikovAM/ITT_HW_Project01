@@ -161,18 +161,28 @@ class View {
           }
         }
 
-        if (el.tagName === 'INPUT' && attName.indexOf('model') >= 0) {
+        if (
+          (el.tagName === 'INPUT' ||
+            el.tagName === 'TEXTAREA' ||
+            el.tagName === 'SELECT') &&
+          attName.indexOf('model') >= 0
+        ) {
           const modif = this.value(data, param, false, true, true);
           // eslint-disable-next-line
           el.value = modif.get();
-          el.addEventListener('keyup', () => {
-            modif.set(el.value);
-          });
+
+          if (el.tagName === 'SELECT') {
+            el.addEventListener('change', () => {
+              modif.set(el.value);
+            });
+          } else
+            el.addEventListener('keyup', () => {
+              modif.set(el.value);
+            });
         }
 
         if (attName === 'if') {
           const modif = this.value(data, param);
-          // console.log(el, modif);
           // eslint-disable-next-line
           if (!modif) el.style.display = 'none';
         }
@@ -496,7 +506,7 @@ class Storage {
     // document.addEventListener('DOMContentLoaded', onLoad);
 
     // -----------test mode
-    // window.localStorage.clear();
+    window.localStorage.clear();
     // -----------test mode
 
     this.mainData = mainData;
@@ -504,12 +514,12 @@ class Storage {
     Object.keys(inputData).forEach(key => {
       if (Reflect.has(window.localStorage, key)) {
         this._mainData[key] = JSON.parse(window.localStorage.getItem(key));
-        console.log('charge');
+        // console.log('charge');
       } else {
         const json = JSON.stringify(inputData[key]);
         window.localStorage.setItem(key, json);
         this._mainData[key] = JSON.parse(json);
-        console.log('key');
+        // console.log('key');
       }
 
       Object.defineProperty(mainData, key, {
@@ -518,7 +528,7 @@ class Storage {
         },
         set(val) {
           const json = JSON.stringify(val);
-          console.log('set', key);
+          // console.log('set', key);
           window.localStorage.setItem(key, json);
           _mainData[key] = JSON.parse(json);
         },
@@ -530,7 +540,7 @@ class Storage {
     window.addEventListener('storage', () => {
       this.loadFromStorage();
       if (Reflect.has(this, '_router')) {
-        console.log('refresh');
+        // console.log('refresh');
         this._router.refresh();
       }
     });
@@ -539,7 +549,7 @@ class Storage {
   loadFromStorage() {
     Object.keys(this._mainData).forEach(key => {
       if (Reflect.has(window.localStorage, key)) {
-        console.log('update', key);
+        // console.log('update', key);
         this._mainData[key] = JSON.parse(window.localStorage.getItem(key));
       }
     });

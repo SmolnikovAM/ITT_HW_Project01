@@ -15,14 +15,7 @@
 
 <body>
 
-    <script type="text/template" id="template_iterate-phone-content">
-<div>
-    <h4>{{ title }}</h4>
-    <p>
-       {{ text }}
-    </p>
-</div>
-</script>
+
 
     <script type="text/template" id="template_show-phone-review">
 <div>
@@ -37,7 +30,7 @@
     <script type="text/template" id="template_pagination">
     <div class="pagination">
             <div>
-              <a :href="review.html?id={{reviewToShow.options.linkPrevios}}"> <strong> <<< </strong></a>
+              <a :href="review.html?id={{reviewToShow.options.linkPrevious}}"> <strong> <<< </strong></a>
             </div>
             <div>
                <a :href="review.html?id={{reviewToShow.options.linkNext}}"><strong>>>></strong></a>

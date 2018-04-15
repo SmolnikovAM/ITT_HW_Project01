@@ -37,8 +37,59 @@ const dataMain = {
     password2: '',
     registerErrorText: '',
   },
+  editNews: {
+    isEdit: false,
+    isAdd: true,
+    title: '',
+    img: '',
+    id: null,
+    text: '',
+    textObj: {},
+  },
+  editReview: {
+    isEdit: false,
+    isAdd: true,
+    title: '',
+    img: '',
+    id: null,
+    text: '',
+    textObj: {},
+    iframeSrc: '',
+  },
+  editShop: {
+    isEdit: false,
+    isAdd: true,
+    id: null,
+    img: '',
+    name: '',
+    price: 0,
+    warranty: '',
+    contact: '',
+    city: '',
+    type: '',
+  },
   search: '',
 };
+
+function parseText(text) {
+  const arr = text
+    .split('\n')
+    .map(x => x.trim())
+    .filter(x => x.length);
+  const out = [];
+  let appendNew = { text: '', title: '' };
+  arr.forEach(x => {
+    console.log(x);
+    if (x.search(/^#/) >= 0) {
+      appendNew.title = x.replace('#', '');
+    } else {
+      appendNew.text = x;
+      out.push({ ...appendNew });
+      appendNew = { text: '', title: '' };
+    }
+  });
+  return out;
+}
 
 const methods = {
   startAuth() {
@@ -121,10 +172,104 @@ const methods = {
 
   deleteNews(id) {
     const { mainData } = this._model.data;
-    // debugger;
     mainData.news = mainData.news.filter(x => x.id !== id);
     this._router.refresh();
   },
+
+  editNews(id) {
+    const { data } = this._model;
+    const { editNews } = data;
+    const { mainData } = this._model.data;
+    data.editNews.isAdd = true;
+    data.editNews.isEdit = false;
+
+    const article = mainData.news.find(x => x.id === id);
+
+    editNews.title = article.title;
+    editNews.img = article.img;
+    editNews.id = article.id;
+
+    let text = '';
+    article.text.forEach(t => {
+      text += `${t.title ? `#${t.title}` : ''}\n${t.text}\n\n`;
+    });
+
+    editNews.text = text;
+    this._router.refresh();
+  },
+
+  addNews() {
+    const { data } = this._model;
+    const { editNews } = data;
+    const { mainData } = this._model.data;
+    const { title, img, textObj, text } = editNews;
+    data.editNews.isAdd = true;
+    data.editNews.isEdit = false;
+
+    if (text.length === 0 || title.length === 0) return;
+
+    fetch(img)
+      .then(res => {
+        if (res.status !== 200) throw Error('Not found');
+        const id =
+          mainData.news.reduce((a, b) => Math.max(a, b.id), -Infinity) + 1;
+        editNews.textObj = parseText(editNews.text);
+
+        const updateArticle = { id, title, img, text: textObj };
+
+        mainData.news = [...mainData.news, updateArticle].sort(
+          (a, b) => a.id - b.id,
+        );
+        data.editNews.title = '';
+        data.editNews.text = '';
+        data.editNews.img = '';
+        this._router.refresh();
+      })
+      .catch(() => {});
+  },
+
+  updateNews(id) {
+    const { data } = this._model;
+    const { editNews } = data;
+    const { mainData } = this._model.data;
+    data.editNews.isAdd = true;
+    data.editNews.isEdit = false;
+
+    const articles = mainData.news.filter(x => x.id !== id);
+    editNews.textObj = parseText(editNews.text);
+    const { title, img, textObj } = editNews;
+    const updateArticle = { id, title, img, text: textObj };
+
+    mainData.news = [...articles, updateArticle].sort((a, b) => a.id - b.id);
+
+    this._router.refresh();
+  },
+
+  updateNewsCancel() {
+    const { data } = this._model;
+    data.editNews.isAdd = true;
+    data.editNews.isEdit = false;
+    data.editNews.title = '';
+    data.editNews.text = '';
+    data.editNews.img = '';
+    this._router.refresh();
+  },
+
+  deleteReview(id) {
+    const { mainData } = this._model.data;
+    mainData.review = mainData.review.filter(x => x.id !== id);
+    this._router.refresh();
+  },
+  editReview() {},
+  addReview() {},
+  updateReview(id) {},
+  updateReviewCancel() {},
+
+  deleteShop() {},
+  editShop() {},
+  addShop() {},
+  updateShop(id) {},
+  updateShopCancel() {},
 
   goSearch(search, event) {
     let startSearch = false;
@@ -155,18 +300,11 @@ function loadToStorage(model, dataName) {
 
   return model._isLocalChecked
     .then(() => {
-      console.log(
-        'dataloaded status',
-        dataName,
-        storage.mainData.loadedData[dataName],
-        storage.mainData.usersPath,
-      );
       if (storage.mainData.loadedData[dataName]) throw new Error('test');
     })
     .then(() => fetch(storage.mainData.loadedData[`${dataName}Path`]))
     .then(res => res.json())
     .then(res => {
-      console.log('loading file', dataName);
       storage.mainData[dataName] = res;
       const tmp = { ...storage.mainData.loadedData };
       tmp[dataName] = true;
@@ -212,14 +350,27 @@ const beforeRenderReview = (model, cb) => {
 
   loadToStorage(model, 'review')
     .then(() => {
-      const { length } = Object.keys(mainData.review);
-      if (id <= 0 || id > length) id = 1;
+      const ids = mainData.review.map(x => x.id);
+      const len = ids.length;
+      let p = ids.indexOf(id);
+      if (p === -1) {
+        p = 0;
+        id = ids[p];
+      }
+
       data.reviewToShow = mainData.review[id];
-      if (!data.reviewToShow.options)
-        data.reviewToShow.options = {
-          linkPrevios: id - 1 > 0 ? id - 1 : length,
-          linkNext: id + 1 <= length ? id + 1 : 1,
-        };
+
+      data.reviewToShow.options = {
+        linkPrevious: ids[p - 1 < 0 ? len - 1 : p - 1],
+        linkNext: ids[p + 1 >= len ? 0 : p + 1],
+      };
+      // if (id <= 0 || id > length) id = 1;
+      // data.reviewToShow = mainData.review[id];
+      // if (!data.reviewToShow.options)
+      //   data.reviewToShow.options = {
+      //     linkPrevious: id - 1 > 0 ? id - 1 : length,
+      //     linkNext: id + 1 <= length ? id + 1 : 1,
+      //   };
     })
     .then(cb);
 };

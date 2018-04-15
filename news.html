@@ -18,13 +18,13 @@
     <script type="text/template" id="template_show-news-iterate">
     <div>
         <div class="hideContent">
-            <h3>{{title}}</h3>
+            <h3>{{ title }}</h3>
             <img :src="img" :alt="title"/>
-            {{text}}
-        </div>
-        <div class="show">
-            <a href="#">...Show More</a>
-        </div>
+            <div class="show">
+                <a href="#">...Show More</a>
+            </div>
+            <component foreach page="iterate-phone-content" data="text"></component>
+       
     </div>
 </script>
 

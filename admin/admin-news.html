@@ -18,34 +18,49 @@
 
   <script type="text/template" id="template_add-news">
    <div class="admin-news">
-     <form>
+     <div class="admin-form">
         <div>
         <input class="admin-input" 
                name="name" 
                placeholder="Enter Title" 
-               type="text">
+               type="text"
+               model="editNews.title">
         </div>
            <div>
            <input class="admin-input" 
                   name="name" 
-                  placeholder="Enter Image URL" type="text">
+                  placeholder="Enter Image URL" type="text"
+                  model="editNews.img">
            </div>
         <div>
            <textarea class="admin-input" 
                      name="name" 
-                     placeholder="Enter Text" type="text"></textarea>
+                     placeholder="Enter Text" 
+                     type="text"
+                     model="editNews.text"></textarea>
         </div>
         <div>
-          <button class="admin-btn">Добави</button>
-          </div>
-        </form>
+          <button if="editNews.isAdd" 
+                  class="admin-btn"
+                  @click="addNews">Добави</button>
+          <button if="editNews.isEdit" 
+                  @click="updateNews(editNews.id)" 
+                  class="admin-btn">Обнови</button>
+          <button if="editNews.isEdit" 
+                  class="admin-btn"
+                  @click="updateNewsCancel">Отмени</button>
+        </div>
+        </div>
        </div>
 </script>
 
+
+
   <script type="text/template" id="template_all-news">
       <div class="admin-news-iterate">
-        {{ title }} 
+        {{ id }}  -- {{ title }} 
         <button @click="deleteNews(id)">Delete news</button>
+        <button @click="editNews(id)">Edit news</button>
      </div>
 </script>
 
