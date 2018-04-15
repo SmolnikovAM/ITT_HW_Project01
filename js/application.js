@@ -119,6 +119,12 @@ const methods = {
     this._router.refresh();
   },
 
+  deleteNews(id) {
+    const { mainData } = this._model.data;
+    mainData.news = mainData.news.filter(x => x.id !== id);
+    this._router.refresh();
+  },
+
   goSearch(search, event) {
     let startSearch = false;
     if (event instanceof KeyboardEvent && event.code === 'Enter') {
@@ -145,16 +151,19 @@ const methods = {
 
 function loadToStorage(model, dataName) {
   const { storage } = model;
-  if (storage.mainData.loadedData[dataName]) {
-    return new Promise(res => res());
-  }
-  return fetch(storage.mainData.loadedData[`${dataName}Path`])
+
+  return model._isLocalChecked
+    .then(() => {
+      if (storage.mainData.loadedData[dataName]) throw new Error('test');
+    })
+    .then(() => fetch(storage.mainData.loadedData[`${dataName}Path`]))
     .then(res => res.json())
     .then(res => {
       // console.log(res);
       storage.mainData[dataName] = res;
       storage.mainData.loadedData[dataName] = true;
-    });
+    })
+    .catch(() => new Promise(res => res()));
 }
 
 const beforeRenderMain = (model, cb) => {
@@ -218,22 +227,21 @@ const beforeRenderNews = (model, cb) => {
 
 const beforeRenderAdmin = (model, cb) => {
   const { data } = model;
-  cb();
-  return; //for testing
 
   loadToStorage(model, 'listOfPhones')
     .then(() => loadToStorage(model, 'news'))
     .then(() => loadToStorage(model, 'review'))
     .then(() => {
       cb();
-      if (!data.mainData.auth.isAdmin) throw new Error('No rights');
+      // if (!data.mainData.auth.isAdmin) throw new Error('No rights');
     })
-    .then(cb)
     .catch(() => model._router.goToStartPage());
 };
 
 const storage = new Storage(storageData);
 const view = new View();
+
+console.log(storage);
 
 const modelMain = new Model(dataMain, storage);
 const controllerMainPage = new Controller(methods, modelMain);

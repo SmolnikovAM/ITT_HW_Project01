@@ -50,3 +50,9 @@ textarea {
     cursor: pointer;
 
 }
+
+.admin-news-iterate{
+    width:50%; 
+    border: solid black; 
+    margin: auto;
+}

@@ -7,6 +7,7 @@ class Application {
   constructor({ view, router, beginFromStartPage }) {
     let isMainPage = false;
     let startPageRoute;
+
     this.router = router;
     router.routerMap.forEach(route => {
       const { model, controller, pathname, startPage } = route;
@@ -18,6 +19,9 @@ class Application {
       // eslint-disable-next-line
       model._router = router;
       // eslint-disable-next-line
+      if (model.storage) {
+        model.storage._router = router;
+      }
       route.render = () =>
         view.createRenderFunction({ model, controller })(pathname);
       controller.methods._route = router.startRouting(view);
@@ -490,9 +494,9 @@ class Storage {
     const _mainData = {};
 
     // document.addEventListener('DOMContentLoaded', onLoad);
-    // window.addEventListener('storage', () => this.loadFromStorage());
+
     // -----------test mode
-    window.localStorage.clear();
+    // window.localStorage.clear();
     // -----------test mode
 
     this.mainData = mainData;
@@ -500,6 +504,7 @@ class Storage {
     Object.keys(inputData).forEach(key => {
       if (Reflect.has(window.localStorage, key)) {
         this._mainData[key] = JSON.parse(window.localStorage.getItem(key));
+        console.log('charge');
       } else {
         const json = JSON.stringify(inputData[key]);
         window.localStorage.setItem(key, json);
@@ -517,6 +522,14 @@ class Storage {
         enumerable: true,
       });
     });
+
+    window.addEventListener('storage', () => {
+      this.loadFromStorage();
+      if (Reflect.has(this, '_router')) {
+        console.log(';refresh');
+        this._router.refresh();
+      }
+    });
   }
 
   loadFromStorage() {
@@ -532,8 +545,14 @@ class Storage {
 class Model {
   constructor(data, storage = null) {
     this.data = data;
+    let ok;
+    this._isLocalChecked = new Promise(res => (ok = res));
     if (storage) {
       this.storage = storage;
+      this.storage._localResolve = ok;
+      window.addEventListener('DOMContentLoaded', () => {
+        ok();
+      });
       this.data.mainData = storage.mainData;
     }
   }
