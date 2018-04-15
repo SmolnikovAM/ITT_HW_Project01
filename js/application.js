@@ -620,7 +620,7 @@ const beforeRenderAdmin = (model, cb) => {
     .then(() => loadToStorage(model, 'review'))
     .then(() => {
       cb();
-      // if (!data.mainData.auth.isAdmin) throw new Error('No rights');
+      if (!data.mainData.auth.isAdmin) throw new Error('No rights');
     })
     .catch(() => model._router.goToStartPage());
 };

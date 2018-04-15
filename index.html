@@ -15,6 +15,45 @@
 
 <body>
 
+    <script type="text/template" id="template_show-shop-iterate">
+        <div>
+            <div>
+                <img :src="img" :alt="name"/>
+            </div>
+            <div class="info">
+                <div>
+                    <div>име</div>
+                    <div class="name">{{name}}</div>
+                </div>
+                <div>
+                    <div>цена</div>
+                    <div class="price">{{price}}</div>
+                </div>
+                <div>
+                    <div>гаранция</div>
+                    <div>{{warranty}}</div>
+                </div>
+                <div>
+                    <div>контакт</div>
+                    <div class="contact">{{contact}}</div>
+                </div>
+                <div>
+                    <div>град</div>
+                    <div>{{city}}</div>
+                </div>
+                <div>
+                    <div>тип на обява</div>
+                    <div>{{type}}</div>
+                </div>
+                <div>
+                    <div></div>
+                    <div>
+                        <button class="btn">запази</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
 
     <script type="text/template" id="template_login">
     <form onSubmit="return false">

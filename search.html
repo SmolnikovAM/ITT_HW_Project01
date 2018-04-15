@@ -29,26 +29,22 @@
       <component page="navigation"></component>
     </header>
 
+
+    
     <main>
-        <div class="container">
+        element count: <strong>{{ searchList.length }} </strong>
+                <div class="container">
+                    <div class="shop-main">
+                        <component foreach page="show-shop-iterate" data="searchList"></component>
+                    </div>
+    
+                    <component page="right-form"></component>
+                </div>
+            </main>
+    
 
-        <div class="main-articles">
-            element count: <strong>{{ searchList.length }} </strong>
-            <ul>
-           <component  foreach page="show-search-iterate" data="searchList"></component>
-            </ul>
-        </div>
 
-            <div class="search">
-                <input type="search" 
-                       placeholder="Search..." 
-                       @keydown="goSearch(search)" 
-                       model="search">
-                <input src="img/right_search_ico.gif" type="image" @click="goSearch(search)"/>
-            </div>
-             
-            <component page="right-form"></component>
-    </main>
+
 
     <footer>
       <component page="footer"></component>

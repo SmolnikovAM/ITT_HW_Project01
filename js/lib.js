@@ -28,7 +28,7 @@ class Application {
       controller.methods._router = router;
     });
     if (beginFromStartPage) {
-      console.log('test 0');
+      // console.log('test 0');
       // const displayBefore = view.HTMLRoot.style.visibility;
       const displayBefore = '';
       if (!startPageRoute) throw new Error('You have to select startPage');
@@ -40,11 +40,11 @@ class Application {
         window.location.port ? ':' + window.location.port : ''
       }${startPageRoute}`;
 
-      console.log(startPageRoute);
+      // console.log(startPageRoute);
       router.route(startPageRoute, false, () => {
-        console.log('test cb 1');
+        // console.log('test cb 1');
         router.route(destination, false, () => {
-          console.log('test cb 2');
+          // console.log('test cb 2');
           view.HTMLRoot.style.visibility = displayBefore;
         });
       });
