@@ -509,24 +509,28 @@ class Storage {
         const json = JSON.stringify(inputData[key]);
         window.localStorage.setItem(key, json);
         this._mainData[key] = JSON.parse(json);
+        console.log('key');
       }
+
       Object.defineProperty(mainData, key, {
         get() {
           return _mainData[key];
         },
         set(val) {
-          window.localStorage.setItem(key, JSON.stringify(val));
-          const valReturn = JSON.parse(window.localStorage.getItem(key));
-          _mainData[key] = valReturn;
+          const json = JSON.stringify(val);
+          console.log('set', key);
+          window.localStorage.setItem(key, json);
+          _mainData[key] = JSON.parse(json);
         },
         enumerable: true,
+        configurable: true,
       });
     });
 
     window.addEventListener('storage', () => {
       this.loadFromStorage();
       if (Reflect.has(this, '_router')) {
-        console.log(';refresh');
+        console.log('refresh');
         this._router.refresh();
       }
     });
@@ -534,7 +538,8 @@ class Storage {
 
   loadFromStorage() {
     Object.keys(this._mainData).forEach(key => {
-      if (Reflect.has(window.localStorage, 'key')) {
+      if (Reflect.has(window.localStorage, key)) {
+        console.log('update', key);
         this._mainData[key] = JSON.parse(window.localStorage.getItem(key));
       }
     });
@@ -550,9 +555,9 @@ class Model {
     if (storage) {
       this.storage = storage;
       this.storage._localResolve = ok;
-      window.addEventListener('DOMContentLoaded', () => {
-        ok();
-      });
+      // window.addEventListener('DOMContentLoaded', () => {
+      ok();
+      // });
       this.data.mainData = storage.mainData;
     }
   }

@@ -121,6 +121,7 @@ const methods = {
 
   deleteNews(id) {
     const { mainData } = this._model.data;
+    // debugger;
     mainData.news = mainData.news.filter(x => x.id !== id);
     this._router.refresh();
   },
@@ -154,14 +155,22 @@ function loadToStorage(model, dataName) {
 
   return model._isLocalChecked
     .then(() => {
+      console.log(
+        'dataloaded status',
+        dataName,
+        storage.mainData.loadedData[dataName],
+        storage.mainData.usersPath,
+      );
       if (storage.mainData.loadedData[dataName]) throw new Error('test');
     })
     .then(() => fetch(storage.mainData.loadedData[`${dataName}Path`]))
     .then(res => res.json())
     .then(res => {
-      // console.log(res);
+      console.log('loading file', dataName);
       storage.mainData[dataName] = res;
-      storage.mainData.loadedData[dataName] = true;
+      const tmp = { ...storage.mainData.loadedData };
+      tmp[dataName] = true;
+      storage.mainData.loadedData = tmp;
     })
     .catch(() => new Promise(res => res()));
 }
@@ -238,77 +247,80 @@ const beforeRenderAdmin = (model, cb) => {
     .catch(() => model._router.goToStartPage());
 };
 
-const storage = new Storage(storageData);
-const view = new View();
+function MAIN() {
+  const storage = new Storage(storageData);
+  console.log('storage created');
+  const view = new View();
 
-console.log(storage);
+  const modelMain = new Model(dataMain, storage);
+  const controllerMainPage = new Controller(methods, modelMain);
+  const router = new Router([
+    {
+      pathname: '/index.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderMain,
+      startPage: true,
+    },
+    {
+      pathname: '/search.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderSearch,
+      startPage: false,
+    },
+    {
+      pathname: '/review.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderReview,
+      startPage: false,
+    },
+    {
+      pathname: '/shop.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderShop,
+      startPage: false,
+    },
+    {
+      pathname: '/news.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderNews,
+      startPage: false,
+    },
+    {
+      pathname: '/admin/admin.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderAdmin,
+      startPage: false,
+    },
+    {
+      pathname: '/admin/admin-news.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderAdmin,
+      startPage: false,
+    },
+    {
+      pathname: '/admin/admin-review.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderAdmin,
+      startPage: false,
+    },
+    {
+      pathname: '/admin/admin-shop.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderAdmin,
+      startPage: false,
+    },
+  ]);
 
-const modelMain = new Model(dataMain, storage);
-const controllerMainPage = new Controller(methods, modelMain);
-const router = new Router([
-  {
-    pathname: '/index.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderMain,
-    startPage: true,
-  },
-  {
-    pathname: '/search.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderSearch,
-    startPage: false,
-  },
-  {
-    pathname: '/review.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderReview,
-    startPage: false,
-  },
-  {
-    pathname: '/shop.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderShop,
-    startPage: false,
-  },
-  {
-    pathname: '/news.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderNews,
-    startPage: false,
-  },
-  {
-    pathname: '/admin/admin.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderAdmin,
-    startPage: false,
-  },
-  {
-    pathname: '/admin/admin-news.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderAdmin,
-    startPage: false,
-  },
-  {
-    pathname: '/admin/admin-review.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderAdmin,
-    startPage: false,
-  },
-  {
-    pathname: '/admin/admin-shop.html',
-    model: modelMain,
-    controller: controllerMainPage,
-    beforeRender: beforeRenderAdmin,
-    startPage: false,
-  },
-]);
+  const app = new Application({ view, router, beginFromStartPage: true });
+}
 
-const app = new Application({ view, router, beginFromStartPage: true });
+window.addEventListener('DOMContentLoaded', MAIN);
