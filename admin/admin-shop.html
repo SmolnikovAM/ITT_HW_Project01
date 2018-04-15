@@ -67,8 +67,8 @@
                          class="admin-input" 
                          placeholder="Choose Type"
                          model="editShop.type">
-                            <option value="Купува">Купува</option>
-                            <option value="Продава">Продава</option>
+                            <option value="купува">Купува</option>
+                            <option value="продава">Продава</option>
                         </select>
                     </div>
                     <div>
@@ -91,8 +91,8 @@
     <script type="text/template" id="template_all-shop">
         <div class="admin-news-iterate">
           {{ id }}  -- {{ name }} 
-          <button @click="deleteShop(id)">Delete news</button>
-          <button @click="editShop(id)">Edit news</button>
+          <button @click="deleteShop(id)">Delete</button>
+          <button @click="editShop(id)">Edit</button>
        </div>
   </script>
 

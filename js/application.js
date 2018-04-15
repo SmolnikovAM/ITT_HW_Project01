@@ -79,7 +79,6 @@ function parseText(text) {
   const out = [];
   let appendNew = { text: '', title: '' };
   arr.forEach(x => {
-    console.log(x);
     if (x.search(/^#/) >= 0) {
       appendNew.title = x.replace('#', '');
     } else {
@@ -260,16 +259,252 @@ const methods = {
     mainData.review = mainData.review.filter(x => x.id !== id);
     this._router.refresh();
   },
-  editReview() {},
-  addReview() {},
-  updateReview(id) {},
-  updateReviewCancel() {},
+  editReview(id) {
+    const { data } = this._model;
+    const { editReview } = data;
+    const { mainData } = this._model.data;
+    editReview.isAdd = false;
+    editReview.isEdit = true;
 
-  deleteShop() {},
-  editShop() {},
-  addShop() {},
-  updateShop(id) {},
-  updateShopCancel() {},
+    const article = mainData.review.find(x => x.id === id);
+
+    editReview.title = article.title;
+    editReview.img = article.img;
+    editReview.id = article.id;
+    editReview.iframeSrc = article.iframeSrc;
+
+    let text = '';
+    article.text.forEach(t => {
+      text += `${t.title ? `#${t.title}` : ''}\n${t.text}\n\n`;
+    });
+
+    editReview.text = text;
+    this._router.refresh();
+  },
+
+  addReview() {
+    const { data } = this._model;
+    const { editReview } = data;
+    const { mainData } = this._model.data;
+    const { title, img, text, iframeSrc } = editReview;
+
+    editReview.isAdd = true;
+    editReview.isEdit = false;
+
+    fetch(img)
+      .then(res => {
+        console.log(res.status);
+        if (res.status !== 200) throw Error('Not found');
+        return fetch(iframeSrc);
+      })
+      .then(res => {
+        console.log(res.status);
+        if (res.status !== 200) throw Error('Not found');
+        const id =
+          mainData.review.reduce((a, b) => Math.max(a, b.id), -Infinity) + 1;
+
+        editReview.textObj = parseText(text);
+        const updateArticle = {
+          title,
+          img,
+          text: editReview.textObj,
+          iframeSrc,
+          id,
+        };
+
+        mainData.review = [...mainData.review, updateArticle].sort(
+          (a, b) => a.id - b.id,
+        );
+
+        editReview.title = '';
+        editReview.img = '';
+        editReview.text = '';
+        editReview.iframeSrc = '';
+
+        this._router.refresh();
+      })
+      .catch(() => {});
+  },
+
+  updateReview(id) {
+    const { data } = this._model;
+    const { editReview } = data;
+    const { mainData } = this._model.data;
+    const { title, img, text, iframeSrc } = editReview;
+
+    editReview.isAdd = true;
+    editReview.isEdit = false;
+
+    fetch(img)
+      .then(res => {
+        if (res.status !== 200) throw Error('Not found');
+
+        editReview.textObj = parseText(text);
+        const updateArticle = {
+          title,
+          img,
+          text: editReview.textObj,
+          iframeSrc,
+          id,
+        };
+
+        mainData.review = [
+          ...mainData.review.filter(x => x.id !== id),
+          updateArticle,
+        ].sort((a, b) => a.id - b.id);
+
+        editReview.title = '';
+        editReview.img = '';
+        editReview.text = '';
+        editReview.iframeSrc = '';
+
+        this._router.refresh();
+      })
+      .catch(() => {});
+  },
+
+  updateReviewCancel() {
+    const { editReview } = this._model.data;
+    editReview.isAdd = true;
+    editReview.isEdit = false;
+    editReview.title = '';
+    editReview.img = '';
+    editReview.text = '';
+    editReview.iframeSrc = '';
+    this._router.refresh();
+  },
+
+  deleteShop(id) {
+    const { mainData } = this._model.data;
+    mainData.listOfPhones = mainData.listOfPhones.filter(x => x.id !== id);
+    this._router.refresh();
+  },
+
+  editShop(id) {
+    const { data } = this._model;
+    const { editShop } = data;
+    const { mainData } = this._model.data;
+    editShop.isAdd = false;
+    editShop.isEdit = true;
+
+    const article = mainData.listOfPhones.find(x => x.id === id);
+
+    editShop.title = article.title;
+    editShop.img = article.img;
+
+    editShop.id = article.id;
+    editShop.img = article.img;
+    editShop.name = article.name;
+    editShop.price = article.price;
+    editShop.warranty = article.warranty;
+    editShop.contact = article.contact;
+    editShop.city = article.city;
+    editShop.type = article.type;
+
+    this._router.refresh();
+  },
+
+  addShop() {
+    const { data } = this._model;
+    const { editShop } = data;
+    const { mainData } = this._model.data;
+    const { img, name, price, warranty, contact, city, type } = editShop;
+
+    editShop.isAdd = true;
+    editShop.isEdit = false;
+
+    fetch(img)
+      .then(res => {
+        if (res.status !== 200) throw Error('Not found');
+        const id =
+          mainData.listOfPhones.reduce((a, b) => Math.max(a, b.id), -Infinity) +
+          1;
+
+        const updateArticle = {
+          img,
+          name,
+          price,
+          warranty,
+          contact,
+          city,
+          type,
+          id,
+        };
+
+        mainData.listOfPhones = [...mainData.listOfPhones, updateArticle].sort(
+          (a, b) => a.id - b.id,
+        );
+
+        editShop.img = '';
+        editShop.name = '';
+        editShop.price = '';
+        editShop.warranty = '';
+        editShop.contact = '';
+        editShop.city = '';
+        editShop.type = '';
+
+        this._router.refresh();
+      })
+      .catch(() => {});
+  },
+
+  updateShop(id) {
+    const { data } = this._model;
+    const { editShop } = data;
+    const { mainData } = this._model.data;
+    const { img, name, price, warranty, contact, city, type } = editShop;
+
+    editShop.isAdd = true;
+    editShop.isEdit = false;
+
+    fetch(img)
+      .then(res => {
+        if (res.status !== 200) throw Error('Not found');
+
+        const updateArticle = {
+          img,
+          name,
+          price,
+          warranty,
+          contact,
+          city,
+          type,
+          id,
+        };
+
+        mainData.listOfPhones = [
+          ...mainData.listOfPhones.filter(x => x.id !== id),
+          updateArticle,
+        ].sort((a, b) => a.id - b.id);
+
+        editShop.img = '';
+        editShop.name = '';
+        editShop.price = '';
+        editShop.warranty = '';
+        editShop.contact = '';
+        editShop.city = '';
+        editShop.type = '';
+
+        this._router.refresh();
+      })
+      .catch(() => {});
+  },
+
+  updateShopCancel() {
+    const { editShop } = this._model.data;
+    editShop.isAdd = true;
+    editShop.isEdit = false;
+
+    editShop.img = '';
+    editShop.name = '';
+    editShop.price = '';
+    editShop.warranty = '';
+    editShop.contact = '';
+    editShop.city = '';
+    editShop.type = '';
+
+    this._router.refresh();
+  },
 
   goSearch(search, event) {
     let startSearch = false;
