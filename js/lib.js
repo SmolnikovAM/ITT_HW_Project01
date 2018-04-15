@@ -16,13 +16,16 @@ class Application {
         startPageRoute = pathname;
       }
       // eslint-disable-next-line
+      model._router = router;
+      // eslint-disable-next-line
       route.render = () =>
         view.createRenderFunction({ model, controller })(pathname);
       controller.methods._route = router.startRouting(view);
       controller.methods._router = router;
     });
     if (beginFromStartPage) {
-      const displayBefore = view.HTMLRoot.style.visibility;
+      // const displayBefore = view.HTMLRoot.style.visibility;
+      const displayBefore = '';
       if (!startPageRoute) throw new Error('You have to select startPage');
       view.HTMLRoot.style.visibility = 'hidden';
       const destination = window.location.href;
@@ -158,7 +161,7 @@ class View {
           const modif = this.value(data, param, false, true, true);
           // eslint-disable-next-line
           el.value = modif.get();
-          el.addEventListener('keydown', () => {
+          el.addEventListener('keyup', () => {
             modif.set(el.value);
           });
         }
@@ -256,7 +259,7 @@ class View {
         let goInside = true;
         if (Reflect.has(el.attributes, 'if')) {
           const modif = this.value(data, el.attributes.if.value);
-          console.log(el.attributes.if.value, modif);
+          // console.log(el.attributes.if.value, modif);
           if (modif === undefined)
             throw new Error(`No such field in data ${el.attributes.if.value}`);
           goInside = modif;
@@ -367,6 +370,7 @@ class Router {
       }),
     );
 
+    this.startPage = this.routerMap.find(x => x.startPage);
     window.addEventListener('popstate', () => {
       this.route(window.location.href, false);
     });
@@ -410,6 +414,12 @@ class Router {
     this.route(this.currentPage, false);
   }
 
+  goToStartPage() {
+    // console.log('test', this.startPage.pathname);
+    // this.route
+    this.route(this.startPage.pathname, true);
+    // this.startPage.render();
+  }
   route(href, history = true, callback = () => {}) {
     const parse = this.parseURL(href);
     // console.log(parse);

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/news.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="css/review.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="css/shop.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css" />
-
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/news.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/review.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/shop.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/admin.css" />
     <title>Начало</title>
 </head>
 
@@ -77,39 +77,56 @@
 
     <script type="text/template" id="template_banners">
     <div class="banner">
-        <div><img src="img/banner.jpg"></div>
-        <div><a href="#"><img src="img/fb.jpg"></a></div>
-        <div><a href="#"><img src="img/twitter.jpg"></a></div>
-        <div><a href="#"><img src="img/youtube.jpg"></a></div>
-        <div><a href="#"><img src="img/google.jpg"></a></div>
-        <div><a href="#"><img src="img/calibre.png"></a></div>
+        <div><img src="/img/banner.jpg"></div>
+        <div><a href="#"><img src="/img/fb.jpg"></a></div>
+        <div><a href="#"><img src="/img/twitter.jpg"></a></div>
+        <div><a href="#"><img src="/img/youtube.jpg"></a></div>
+        <div><a href="#"><img src="/img/google.jpg"></a></div>
+        <div><a href="#"><img src="/img/calibre.png"></a></div>
+        
+        <span if="mainData.auth.isAuth"> <br><b>Hi, {{ mainData.auth.name }} </b></span>
     </div>
 </script>
 
     <script type="text/template" id="template_navigation">
 <div class="nav-container">
         <div class="nav">
-            <div><a href="index.html">начало</a></div>
-            <div><a href="news.html">новини</a></div>
-            <div><a href="review.html">ревюта</a></div>
-            <div><a href="shop.html">борса</a></div>
+            <div><a href="/index.html">начало</a></div>
+            <div><a href="/news.html">новини</a></div>
+            <div><a href="/review.html">ревюта</a></div>
+            <div><a href="/shop.html">борса</a></div>
         </div>
         <div class="userinput">
             <div if="mainData.auth.notAuth"><a href="#" @click="startAuth">Вход</a></div>
             <div if="mainData.auth.notAuth"><a href="#" @click="startRegister" >Регистрация</a></div>
-            <div if="mainData.auth.isAuth">{{ mainData.auth.name }}</div>
             <div if="mainData.auth.isAuth"><a href="#" @click="logout">Логаут</a></div>
+            <div if="mainData.auth.isAdmin"><a href="admin/admin.html">Admin</a></div>
+
         </div>
     </div>
 </script>
 
+
+    <script type="text/template" id="template_admin-nav">
+    <div class="nav-container">
+            <div class="nav">
+                <div><a href="/index.html">на сайт</a></div>
+                <div><a href="/admin/admin-news.html">добави новини</a></div>
+                <div><a href="/admin/admin-review.html">добави ревю</a></div>
+                <div><a href="/admin/admin-shop.html">добави обява</a></div>
+            </div>
+        </div>
+</script>
+
+
+
     <script type="text/template" id="template_footer">
         <div>
             <div class="social">
-                <div><a href="#"><img src="img/footer_ico_facebook.jpg"></a></div>
-                <div><a href="#"><img src="img/footer_ico_twitter.jpg"></a></div>
-                <div><a href="#"><img src="img/footer_ico_youtube.jpg"></a></div>
-                <div><a href="#"><img src="img/footer_ico_google.jpg"></a></div>
+                <div><a href="#"><img src="/img/footer_ico_facebook.jpg"></a></div>
+                <div><a href="#"><img src="/img/footer_ico_twitter.jpg"></a></div>
+                <div><a href="#"><img src="/img/footer_ico_youtube.jpg"></a></div>
+                <div><a href="#"><img src="/img/footer_ico_google.jpg"></a></div>
             </div>
             <div>
                 <p>© 2003-2018 "Мобайл България" ООД.</p>
@@ -146,7 +163,7 @@
             placeholder="Search..." 
             @keydown="goSearch(search)" 
             model="search">
-        <input @click="goSearch(search)" src="img/right_search_ico.gif" type="image" />
+        <input @click="goSearch(search)" src="/img/right_search_ico.gif" type="image" />
     </div>
 </script>
 
@@ -186,8 +203,8 @@
 </div>
 </script>
 
-    <script src="js/lib.js"></script>
-    <script src="js/application.js"></script>
+    <script src="/js/lib.js"></script>
+    <script src="/js/application.js"></script>
 </body>
 
 </html>

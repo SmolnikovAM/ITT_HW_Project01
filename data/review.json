@@ -1,7 +1,7 @@
 {
   "3": {
     "title": "HTC U11 Life",
-    "img": "img/review/1.jpg",
+    "img": "/img/review/1.jpg",
     "text": [
       {
         "title": "",
@@ -34,7 +34,7 @@
   },
   "1": {
     "title": "Huawei Mate 10 Pro",
-    "img": "img/review/2.jpg",
+    "img": "/img/review/2.jpg",
     "text": [
       {
         "title": "",
@@ -62,7 +62,7 @@
   },
   "2": {
     "title": "Huawei P Smart",
-    "img": "img/review/3.jpg",
+    "img": "/img/review/3.jpg",
     "text": [
       {
         "title": "",
@@ -85,7 +85,7 @@
   },
   "4": {
     "title": "Motorola Moto Z2",
-    "img": "img/review/4.jpg",
+    "img": "/img/review/4.jpg",
     "text": [
       {
         "title": "",
@@ -108,7 +108,7 @@
   },
   "5": {
     "title": "Samsung Galaxy S9",
-    "img": "img/review/5.jpg",
+    "img": "/img/review/5.jpg",
     "text": [
       {
         "title": "",
@@ -131,7 +131,7 @@
   },
   "6": {
     "title": "Sony Xperia XZ1",
-    "img": "img/review/6.jpg",
+    "img": "/img/review/6.jpg",
     "text": [
       {
         "title": "",

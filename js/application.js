@@ -1,12 +1,12 @@
 const storageData = {
   loadedData: {
     users: false,
-    usersPath: 'data/auth.json',
+    usersPath: '/data/auth.json',
     review: false,
-    reviewPath: 'data/review.json',
+    reviewPath: '/data/review.json',
     listOfPhones: false,
-    listOfPhonesPath: 'data/mobiles.json',
-    newsPath: 'data/news.json',
+    listOfPhonesPath: '/data/mobiles.json',
+    newsPath: '/data/news.json',
     news: false,
   },
   auth: {
@@ -97,6 +97,12 @@ const methods = {
       return;
     }
 
+    if (password1.length <= 7) {
+      registerPanel.registerErrorText = 'password too short ';
+      this._router.refresh();
+      return;
+    }
+
     const user = {
       login,
       name,
@@ -106,7 +112,11 @@ const methods = {
       isAdmin: false,
     };
 
+    registerPanel.registerErrorText = '';
     data.mainData.users = [...data.mainData.users, user];
+    data.registerPanel.showRegisterPanel = false;
+    data.mainData.auth = user;
+    this._router.refresh();
   },
 
   goSearch(search, event) {
@@ -141,7 +151,7 @@ function loadToStorage(model, dataName) {
   return fetch(storage.mainData.loadedData[`${dataName}Path`])
     .then(res => res.json())
     .then(res => {
-      console.log(res);
+      // console.log(res);
       storage.mainData[dataName] = res;
       storage.mainData.loadedData[dataName] = true;
     });
@@ -206,6 +216,22 @@ const beforeRenderNews = (model, cb) => {
   loadToStorage(model, 'news').then(cb);
 };
 
+const beforeRenderAdmin = (model, cb) => {
+  const { data } = model;
+  cb();
+  return; //for testing
+
+  loadToStorage(model, 'listOfPhones')
+    .then(() => loadToStorage(model, 'news'))
+    .then(() => loadToStorage(model, 'review'))
+    .then(() => {
+      cb();
+      if (!data.mainData.auth.isAdmin) throw new Error('No rights');
+    })
+    .then(cb)
+    .catch(() => model._router.goToStartPage());
+};
+
 const storage = new Storage(storageData);
 const view = new View();
 
@@ -245,6 +271,34 @@ const router = new Router([
     model: modelMain,
     controller: controllerMainPage,
     beforeRender: beforeRenderNews,
+    startPage: false,
+  },
+  {
+    pathname: '/admin/admin.html',
+    model: modelMain,
+    controller: controllerMainPage,
+    beforeRender: beforeRenderAdmin,
+    startPage: false,
+  },
+  {
+    pathname: '/admin/admin-news.html',
+    model: modelMain,
+    controller: controllerMainPage,
+    beforeRender: beforeRenderAdmin,
+    startPage: false,
+  },
+  {
+    pathname: '/admin/admin-review.html',
+    model: modelMain,
+    controller: controllerMainPage,
+    beforeRender: beforeRenderAdmin,
+    startPage: false,
+  },
+  {
+    pathname: '/admin/admin-shop.html',
+    model: modelMain,
+    controller: controllerMainPage,
+    beforeRender: beforeRenderAdmin,
     startPage: false,
   },
 ]);
