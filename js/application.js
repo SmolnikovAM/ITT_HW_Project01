@@ -179,8 +179,8 @@ const methods = {
     const { data } = this._model;
     const { editNews } = data;
     const { mainData } = this._model.data;
-    data.editNews.isAdd = true;
-    data.editNews.isEdit = false;
+    data.editNews.isAdd = false;
+    data.editNews.isEdit = true;
 
     const article = mainData.news.find(x => x.id === id);
 

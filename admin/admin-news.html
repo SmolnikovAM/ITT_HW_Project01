@@ -2,92 +2,100 @@
 <html lang="bg">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" type="text/css" media="screen" href="../css/news.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="../css/review.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="../css/shop.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="../css/styles.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="/css/admin.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/news.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/review.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/shop.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/styles.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/admin.css"/>
 
-  <title>Ревю</title>
+    <title>Ревю</title>
 </head>
 
 <body>
 
-  <script type="text/template" id="template_add-news">
-   <div class="admin-news">
-     <div class="admin-form">
-        <div>
-        <input class="admin-input" 
-               name="name" 
-               placeholder="Enter Title" 
-               type="text"
-               model="editNews.title">
-        </div>
-           <div>
-           <input class="admin-input" 
-                  name="name" 
-                  placeholder="Enter Image URL" type="text"
-                  model="editNews.img">
-           </div>
-        <div>
-           <textarea class="admin-input" 
-                     name="name" 
-                     placeholder="Enter Text" 
+<script type="text/template" id="template_add-news">
+    <div class="admin-news">
+        <div class="admin-form">
+            <div>
+                <input class="admin-input"
+                       name="name"
+                       placeholder="Enter Title"
+                       type="text"
+                       model="editNews.title">
+            </div>
+            <div>
+                <input class="admin-input"
+                       name="name"
+                       placeholder="Enter Image URL" type="text"
+                       model="editNews.img">
+            </div>
+            <div>
+           <textarea class="admin-input"
+                     name="name"
+                     placeholder="Enter Text"
                      type="text"
                      model="editNews.text"></textarea>
+            </div>
+            <div>
+                <button if="editNews.isAdd"
+                        class="admin-btn"
+                        @click="addNews">Добави
+                </button>
+                <button if="editNews.isEdit"
+                        @click="updateNews(editNews.id)"
+                        class="admin-btn">Обнови
+                </button>
+                <button if="editNews.isEdit"
+                        class="admin-btn"
+                        @click="updateNewsCancel">Отмени
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/template" id="template_all-news">
+    <div class="admin-news-iterate">
+        <div>
+            {{ id }} -- {{ title }}
         </div>
         <div>
-          <button if="editNews.isAdd" 
-                  class="admin-btn"
-                  @click="addNews">Добави</button>
-          <button if="editNews.isEdit" 
-                  @click="updateNews(editNews.id)" 
-                  class="admin-btn">Обнови</button>
-          <button if="editNews.isEdit" 
-                  class="admin-btn"
-                  @click="updateNewsCancel">Отмени</button>
+            <button class="admin-button" @click="editNews(id)">Edit</button>
+            <button class="admin-button" @click="deleteNews(id)">Delete</button>
         </div>
-        </div>
-       </div>
+    </div>
 </script>
 
-
-
-  <script type="text/template" id="template_all-news">
-      <div class="admin-news-iterate">
-        {{ id }}  -- {{ title }} 
-        <button @click="deleteNews(id)">Delete</button>
-        <button @click="editNews(id)">Edit</button>
-     </div>
-</script>
-
-  <script type="text/template" id="template_/admin/admin-news.html">
+<script type="text/template" id="template_/admin/admin-news.html">
     <div class="main-container">
         <header>
-          <component page="banners"></component>
-          <component page="admin-nav"></component>
+            <component page="banners"></component>
+            <component page="admin-nav"></component>
         </header>
         <main>
-          <div class="container-admin">
-              <div class="admin-news">  
-                <component foreach page="all-news" data="mainData.news"></component>
-              </div>
-            <component page="add-news"></component>
-          </div>
+            <div class="container-admin">
+                <div class="edit">
+                    <div class="admin-news">
+                        <component foreach page="all-news" data="mainData.news"></component>
+                    </div>
+                </div>
+                <component page="add-news"></component>
+            </div>
         </main>
-    
+
         <footer>
-          <component page="footer"></component>
+            <component page="footer"></component>
         </footer>
     </div>
-    </script>
+</script>
 
 
-  <script src="../js/lib.js"></script>
-  <script src="../js/application.js"></script>
+<script src="../js/lib.js"></script>
+<script src="../js/application.js"></script>
 </body>
 
 </html>

@@ -182,6 +182,7 @@ img {
     width: 100%;
     text-align: end;
     padding: 5px;
+    transition:0.5s;
 }
 
 #user {

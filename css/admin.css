@@ -1,33 +1,64 @@
-
 .container-admin {
     background-color:     #CCCCCC;
     margin: 10px;
     min-height: 400px;
+    position: relative;
+}
+
+.container-admin {
+    position: relative;
 }
 
 .nav-container > div:first-child, .container > div:first-child {
     width: 100%;
 }
 
+
+.edit {
+    height: 350px;
+    width: 50%;
+    margin: 20px auto 40px auto;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.edit > div:first-child {
+    margin-top: 10px;
+}
+
 .admin-news {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     flex-direction: column;
 }
 
-.admin-input {
+.admin-input,.admin-news-iterate {
     width: 100%;
     border: 1px solid #e6e6e6;
     border-radius: 13px;
-    padding: 10px 0 10px 20px;
+    padding: 10px 0;
     margin-bottom: 20px;
 }
 
 .admin-form {
     width: 50%;
     margin: auto;
-    padding: 20px;
+}
+
+.admin-news-iterate {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    height: auto;
+    background-color: #ffffff;
+}
+
+.admin-news-iterate > div:first-child {
+    width: 70%;
+}
+
+.admin-news-iterate > div:last-child {
+    margin-left: 30px;
 }
 
 textarea {
@@ -51,8 +82,15 @@ textarea {
 
 }
 
+.admin-button {
+    background-color: #333333;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+}
+
 .admin-news-iterate{
-    width:50%; 
-    border: solid black; 
-    margin: auto;
+    width:90%;
+    margin-left: auto;
+    margin-right: auto;
 }

@@ -136,8 +136,8 @@
         <div class="userinput">
             <div if="mainData.auth.notAuth"><a href="#" @click="startAuth">Вход</a></div>
             <div if="mainData.auth.notAuth"><a href="#" @click="startRegister">Регистрация</a></div>
-            <div if="mainData.auth.isAuth"><a href="#" @click="logout">Логаут</a></div>
-            <div if="mainData.auth.isAdmin"><a href="admin/admin.html">Admin</a></div>
+            <div if="mainData.auth.isAuth"><a href="#" @click="logout">Изход</a></div>
+            <div if="mainData.auth.isAdmin"><a href="admin/admin-news.html">Админ</a></div>
 
         </div>
     </div>
@@ -156,7 +156,7 @@
 <script type="text/template" id="template_admin-nav">
     <div class="nav-container">
         <div class="nav">
-            <div><a href="/index.html">на сайт</a></div>
+            <div><a href="/index.html">начало</a></div>
             <div><a href="/admin/admin-news.html">добави новини</a></div>
             <div><a href="/admin/admin-review.html">добави ревю</a></div>
             <div><a href="/admin/admin-shop.html">добави обява</a></div>
