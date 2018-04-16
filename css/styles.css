@@ -118,7 +118,6 @@ img {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: bold;
-
 }
 
 
@@ -129,7 +128,6 @@ img {
     text-align: center;
     color: white;
 }
-
 .container {
     display: flex;
     flex-direction: row;
