@@ -11,13 +11,12 @@
     border-radius: 4px;
     padding: 5px;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    transition: all .75s ease;
+
 }
 
 .shop-main img:hover {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    margin: auto;
+     transform: scale(1.4);
 }
 
 

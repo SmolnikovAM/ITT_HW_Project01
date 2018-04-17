@@ -6,10 +6,11 @@
 .news-articles > div {
     border-bottom: 2px solid darkgrey;
     padding: 10px;
+    transition: all .4s ease;
 }
 
 .news-articles > div:hover {
-    background-color: #EEEEEE;
+    font-family: "Comic Sans MS", sans-serif;
 }
 
 .hideContent {
