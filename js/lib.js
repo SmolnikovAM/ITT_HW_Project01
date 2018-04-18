@@ -17,6 +17,8 @@ class Application {
         startPageRoute = pathname;
       }
       // eslint-disable-next-line
+      controller.methods._view = view;
+      // eslint-disable-next-line
       model._router = router;
       // eslint-disable-next-line
       if (model.storage) {
@@ -76,6 +78,7 @@ class View {
       appId,
     };
 
+    this.DOMreferences = {};
     this.options.idPattrnRegExp = new RegExp(this.options.idPattrn);
     if (appId) {
       this.HTMLRoot = document.getElementById(appId);
@@ -145,6 +148,7 @@ class View {
   }
 
   modifyElementNode({ el, data, methods }) {
+    let preventDefaultFlag = false;
     if (el.nodeType !== 3 && el.attributes) {
       Object.keys({ ...el.attributes }).forEach(key => {
         const attName = el.attributes[key].name;
@@ -152,16 +156,22 @@ class View {
 
         if (attName.indexOf(':') >= 0) {
           const newKey = attName.replace(':', '');
+          let newVal;
 
           if (param.indexOf('{{') >= 0) {
-            el.setAttribute(
-              newKey,
-              this.replaceMustache({ text: param, data }),
-            );
+            newVal = this.replaceMustache({ text: param, data });
+          } else if (newKey !== 'ref') {
+            newVal = this.value(data, param);
+          }
+
+          if (newKey === 'ref') {
+            this.DOMreferences[newVal || param] = el;
           } else {
-            el.setAttribute(newKey, this.value(data, param));
+            el.setAttribute(newKey, newVal);
           }
         }
+
+        if (attName === 'prevent-default') preventDefaultFlag = true;
 
         if (
           (el.tagName === 'INPUT' ||
@@ -183,11 +193,14 @@ class View {
             });
         }
 
+        // IF atribute
         if (attName === 'if') {
           const modif = this.value(data, param);
           // eslint-disable-next-line
           if (!modif) el.style.display = 'none';
         }
+
+        // click atribute
 
         if (
           attName.indexOf('@click') >= 0 ||
@@ -204,8 +217,10 @@ class View {
               .split(',');
 
             el.addEventListener(eventMethod, e => {
+              if (preventDefaultFlag) e.preventDefault();
               setTimeout(() => {
                 const evalParams = params.map(p => this.value(data, p));
+
                 methods[methodName](...evalParams, e);
               }, 0);
             });
@@ -214,17 +229,24 @@ class View {
             if (!Reflect.has(methods, paramName)) {
               throw new Error(`No such method ${paramName}`);
             }
-            el.addEventListener('click', e => methods[paramName](e));
+            el.addEventListener('click', e => {
+              if (preventDefaultFlag) {
+                e.preventDefault();
+              }
+              methods[paramName](e);
+            });
           }
         }
       });
     }
 
     if (el.tagName === 'A') {
-      el.addEventListener('click', e => {
-        e.preventDefault();
-        methods._route(el.href, e);
-      });
+      if (el.href.search(/^http/) >= 0) {
+        el.addEventListener('click', e => {
+          e.preventDefault();
+          if (!preventDefaultFlag) methods._route(el.href, e);
+        });
+      }
     }
   }
 

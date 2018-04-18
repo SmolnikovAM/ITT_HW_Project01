@@ -518,15 +518,30 @@ const methods = {
       this._route(`search.html?query=${search}`);
     }
   },
-  showContent(options) {
-    if (options.classContent === 'hideContent') {
-      options.classContent = 'show';
-      options.textForShowHideButton = 'show less';
+  showContent(id, { target }) {
+    const { DOMreferences } = this._view;
+    const el = DOMreferences[`news-${id}`];
+    if (el.classList.contains('hideContent')) {
+      console.log('show');
+      // eslint-disable-next-line
+      target.textContent = 'Show less...';
+      el.classList.add('show');
+      el.classList.remove('hideContent');
     } else {
-      options.classContent = 'hideContent';
-      options.textForShowHideButton = 'show more';
+      console.log('hide');
+      // eslint-disable-next-line
+      target.textContent = 'Show more...';
+      el.classList.remove('show');
+      el.classList.add('hideContent');
     }
-    this._route(window.location.href, false); // rerender current page without hostory
+    // if (options.classContent === 'hideContent') {
+    //   options.classContent = 'show';
+    //   options.textForShowHideButton = 'show less';
+    // } else {
+    //   options.classContent = 'hideContent';
+    //   options.textForShowHideButton = 'show more';
+    // }
+    // this._route(window.location.href, false); // rerender current page without hostory
   },
 };
 
