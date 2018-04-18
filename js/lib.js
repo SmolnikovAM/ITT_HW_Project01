@@ -149,6 +149,8 @@ class View {
 
   modifyElementNode({ el, data, methods }) {
     let preventDefaultFlag = false;
+    let outsideLink = false;
+
     if (el.nodeType !== 3 && el.attributes) {
       Object.keys({ ...el.attributes }).forEach(key => {
         const attName = el.attributes[key].name;
@@ -172,6 +174,7 @@ class View {
         }
 
         if (attName === 'prevent-default') preventDefaultFlag = true;
+        if (attName === 'outside') outsideLink = true;
 
         if (
           (el.tagName === 'INPUT' ||
@@ -241,7 +244,7 @@ class View {
     }
 
     if (el.tagName === 'A') {
-      if (el.href.search(/^http/) >= 0) {
+      if (!outsideLink) {
         el.addEventListener('click', e => {
           e.preventDefault();
           if (!preventDefaultFlag) methods._route(el.href, e);
