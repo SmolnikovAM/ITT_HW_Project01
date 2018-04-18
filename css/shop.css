@@ -10,15 +10,14 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     transition: all .75s ease;
 
 }
 
 .shop-main img:hover {
-     transform: scale(1.4);
+    transform: scale(1.4);
 }
-
 
 .shop-main > div {
     position: relative;
