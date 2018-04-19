@@ -103,6 +103,8 @@ const methods = {
   logout() {
     const { data } = this._model;
     data.loginPanel.loginErrorText = '';
+    data.loginPanel.login = '';
+    data.loginPanel.password = '';
     data.mainData.auth = storageData.auth;
     data.loginPanel.showLoginPanel = false;
     data.registerPanel.showRegisterPanel = false;
@@ -120,7 +122,7 @@ const methods = {
     const user = data.mainData.users.find(
       x =>
         x.password === data.loginPanel.password &&
-        x.login === data.loginPanel.login,
+        x.login.toUpperCase() === data.loginPanel.login.toUpperCase(),
     );
     data.password = '';
     if (user) {
@@ -157,7 +159,8 @@ const methods = {
     }
 
     if (password1.length <= 7) {
-      registerPanel.registerErrorText = 'password must be at least 8 chars long';
+      registerPanel.registerErrorText =
+        'password must be at least 8 chars long';
       this._router.refresh();
       return;
     }
@@ -531,7 +534,6 @@ const methods = {
     const { DOMreferences } = this._view;
     const el = DOMreferences[`news-${id}`];
     if (el.classList.contains('hideContent')) {
-      console.log('show');
       // eslint-disable-next-line
       target.textContent = 'Show less...';
       el.classList.add('show');
