@@ -138,6 +138,12 @@ const methods = {
     const { data } = this._model;
     const { registerPanel } = data;
     const { login, name, password1, password2 } = registerPanel;
+    if (!login) {
+      registerPanel.registerErrorText = 'Invalid username';
+      this._router.refresh();
+      return;
+    }
+
     if (data.mainData.users.find(x => x.login === login)) {
       registerPanel.registerErrorText = 'username  exists';
       this._router.refresh();
@@ -151,7 +157,7 @@ const methods = {
     }
 
     if (password1.length <= 7) {
-      registerPanel.registerErrorText = 'password too short ';
+      registerPanel.registerErrorText = 'password must be at least 8 chars long';
       this._router.refresh();
       return;
     }

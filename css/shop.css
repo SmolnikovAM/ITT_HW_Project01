@@ -32,6 +32,8 @@
 .shop-main > div > div {
     flex: 1 1 50%;
     padding: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .info {
