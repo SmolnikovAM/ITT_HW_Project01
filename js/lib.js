@@ -35,11 +35,13 @@ class Application {
       // const displayBefore = view.HTMLRoot.style.visibility;
       const displayBefore = '';
       if (!startPageRoute) throw new Error('You have to select startPage');
+      // eslint-disable-next-line
       view.HTMLRoot.style.visibility = 'hidden';
       const destination = window.location.href;
       startPageRoute = `${window.location.protocol}//${
         window.location.hostname
       }${
+        // eslint-disable-next-line
         window.location.port ? ':' + window.location.port : ''
       }${startPageRoute}`;
 
@@ -48,6 +50,7 @@ class Application {
         // console.log('test cb 1');
         router.route(destination, false, () => {
           // console.log('test cb 2');
+          // eslint-disable-next-line
           view.HTMLRoot.style.visibility = displayBefore;
         });
       });
@@ -598,6 +601,7 @@ class Model {
   constructor(data, storage = null) {
     this.data = data;
     let ok;
+    // eslint-disable-next-line
     this._isLocalChecked = new Promise(res => (ok = res));
     if (storage) {
       this.storage = storage;
