@@ -520,9 +520,11 @@ const methods = {
 
   goSearch(search, event) {
     let startSearch = false;
+    // eslint-disable-next-line
     if (event instanceof KeyboardEvent && event.code === 'Enter') {
       startSearch = true;
     }
+    // eslint-disable-next-line
     if (event instanceof MouseEvent) {
       startSearch = true;
     }
@@ -739,11 +741,16 @@ const beforeRenderAdmin = (model, cb) => {
 };
 
 function MAIN() {
+  // eslint-disable-next-line
   const storage = new Storage(storageData);
+  // eslint-disable-next-line
   const view = new View();
 
+  // eslint-disable-next-line
   const modelMain = new Model(dataMain, storage);
+  // eslint-disable-next-line
   const controllerMainPage = new Controller(methods, modelMain);
+  // eslint-disable-next-line
   const router = new Router([
     {
       pathname: '/index.html',
@@ -817,6 +824,7 @@ function MAIN() {
     },
   ]);
 
+  // eslint-disable-next-line
   const app = new Application({ view, router, beginFromStartPage: true });
   window.app = app;
 }
