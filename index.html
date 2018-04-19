@@ -23,32 +23,34 @@
         <div class="info">
             <div>
                 <div>име</div>
-                <div class="name">{{name}}</div>
+                <div class="name">{{ name }}</div>
             </div>
             <div>
                 <div>цена</div>
-                <div class="price">{{price}}</div>
+                <div class="price">{{ price }}</div>
             </div>
             <div>
                 <div>гаранция</div>
-                <div>{{warranty}}</div>
+                <div>{{ warranty }}</div>
             </div>
             <div>
                 <div>контакт</div>
-                <div class="contact">{{contact}}</div>
+                <div class="contact">{{ contact }}</div>
             </div>
             <div>
                 <div>град</div>
-                <div>{{city}}</div>
+                <div>{{ city }}</div>
             </div>
             <div>
                 <div>тип на обява</div>
-                <div>{{type}}</div>
+                <div>{{ type }}</div>
             </div>
             <div>
                 <div></div>
                 <div>
-                    <button class="btn">запази</button>
+                    <button if="notSaved" class="btn" @click="savePhone(id)">запази</button>
+                    <button if="isSaved" class="btn"  @click="deletePhone(id)">изтрий</button>
+                
                 </div>
             </div>
         </div>
@@ -194,9 +196,12 @@
         </div>
     </div>
 </script>
+
 <script type="text/template" id="template_user">
+    <div>
     <div id="user" if="mainData.auth.isAuth">Hi, {{ mainData.auth.name }}</div>
-    <div if="mainData.auth.isAuth"><a href="#" @click="saved">Запазени</a></div>
+    <div if="mainData.auth.isAuth"><a href="/saved.html">Запазени</a></div>
+    </div>
 </script>
 
 <script type="text/template" id="template_userform">

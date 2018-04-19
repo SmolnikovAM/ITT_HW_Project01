@@ -1,7 +1,7 @@
 // ----------------------------
 // ------APPLICATION-----------
 // ----------------------------
-
+const VERSION = '1.0.1';
 // eslint-disable-next-line
 class Application {
   constructor({ view, router, beginFromStartPage }) {
@@ -536,7 +536,10 @@ class Storage {
     // document.addEventListener('DOMContentLoaded', onLoad);
 
     // -----------test mode
-    // window.localStorage.clear();
+    if (window.localStorage.getItem('version') !== VERSION) {
+      window.localStorage.clear();
+      window.localStorage.setItem('version', VERSION);
+    }
     // -----------test mode
 
     this.mainData = mainData;

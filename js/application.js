@@ -19,6 +19,7 @@ const storageData = {
   review: {},
   news: {},
   listOfPhones: {},
+  savedPhones: [], // [{userId, phoneId }, {userId, phoneId} ]
 };
 
 const dataMain = {
@@ -69,6 +70,8 @@ const dataMain = {
     type: '',
   },
   search: '',
+  listOfPhonesWithSave: [],
+  savedList: [],
 };
 
 function parseText(text) {
@@ -534,14 +537,36 @@ const methods = {
       el.classList.remove('show');
       el.classList.add('hideContent');
     }
-    // if (options.classContent === 'hideContent') {
-    //   options.classContent = 'show';
-    //   options.textForShowHideButton = 'show less';
-    // } else {
-    //   options.classContent = 'hideContent';
-    //   options.textForShowHideButton = 'show more';
-    // }
-    // this._route(window.location.href, false); // rerender current page without hostory
+  },
+  savePhone(id) {
+    const { savedPhones } = this._model.data.mainData;
+    const { auth } = this._model.data.mainData;
+    const { mainData } = this._model.data;
+    if (
+      !savedPhones.find(
+        ({ phoneId, userId }) => phoneId === id && auth.id === userId,
+      )
+    ) {
+      mainData.savedPhones = [...savedPhones, { phoneId: id, userId: auth.id }];
+      this._router.refresh();
+    }
+  },
+  deletePhone(id) {
+    const { savedPhones } = this._model.data.mainData;
+    const { auth } = this._model.data.mainData;
+    const { mainData } = this._model.data;
+    if (
+      savedPhones.find(
+        ({ phoneId, userId }) => phoneId === id && auth.id === userId,
+      )
+    ) {
+      mainData.savedPhones = [
+        ...savedPhones.filter(
+          ({ phoneId, userId }) => !(phoneId === id && auth.id === userId),
+        ),
+      ];
+      this._router.refresh();
+    }
   },
 };
 
@@ -570,10 +595,6 @@ const beforeRenderMain = (model, cb) => {
     .then(() => loadToStorage(model, 'users'))
     .then(() => {
       data.main = data.mainData.review.filter((_, index) => index < 4);
-      // while (i < 5 && keyData.length > i) {
-      //   data.main[i] = data.mainData.review[keyData[i]];
-      //   i += 1;
-      // }
     })
     .then(cb);
 };
@@ -583,11 +604,59 @@ const beforeRenderSearch = (model, cb) => {
   loadToStorage(model, 'listOfPhones')
     .then(() => {
       if (data.params.query) {
-        data.searchList = data.mainData.listOfPhones.filter(
-          x =>
-            x.name.toUpperCase().indexOf(data.params.query.toUpperCase()) >= 0,
-        );
+        data.searchList = data.mainData.listOfPhones
+          .filter(
+            x =>
+              x.name.toUpperCase().indexOf(data.params.query.toUpperCase()) >=
+              0,
+          )
+          .map(x => {
+            let isSaved = false;
+            let notSaved = false;
+
+            if (data.mainData.auth.isAuth) {
+              isSaved = Boolean(
+                data.mainData.savedPhones.find(
+                  ({ userId, phoneId }) =>
+                    phoneId === x.id && userId === data.mainData.auth.id,
+                ),
+              );
+              notSaved = !isSaved;
+            }
+
+            return {
+              ...x,
+              isSaved,
+              notSaved,
+            };
+          });
       }
+    })
+    .then(cb);
+};
+
+const beforeRenderSaved = (model, cb) => {
+  const { data } = model;
+  loadToStorage(model, 'listOfPhones')
+    .then(() => {
+      data.savedList = data.mainData.listOfPhones
+        .filter(x =>
+          Boolean(
+            data.mainData.savedPhones.find(
+              ({ userId, phoneId }) =>
+                phoneId === x.id && userId === data.mainData.auth.id,
+            ),
+          ),
+        )
+        .map(x => {
+          const isSaved = true;
+          const notSaved = false;
+          return {
+            ...x,
+            isSaved,
+            notSaved,
+          };
+        });
     })
     .then(cb);
 };
@@ -619,11 +688,32 @@ const beforeRenderReview = (model, cb) => {
 
 const beforeRenderShop = (model, cb) => {
   const { data } = model;
-  loadToStorage(model, 'listOfPhones').then(cb);
+  loadToStorage(model, 'listOfPhones').then(() => {
+    data.listOfPhonesWithSave.length = 0;
+    data.mainData.listOfPhones.forEach(phone => {
+      let isSaved = false;
+      let notSaved = false;
+      if (data.mainData.auth.isAuth) {
+        isSaved = Boolean(
+          data.mainData.savedPhones.find(
+            ({ userId, phoneId }) =>
+              phoneId === phone.id && userId === data.mainData.auth.id,
+          ),
+        );
+        notSaved = !isSaved;
+      }
+      data.listOfPhonesWithSave.push({
+        ...phone,
+        isSaved,
+        notSaved,
+      });
+    });
+
+    cb();
+  });
 };
 
 const beforeRenderNews = (model, cb) => {
-  const { data } = model;
   loadToStorage(model, 'news').then(cb);
 };
 
@@ -659,6 +749,13 @@ function MAIN() {
       model: modelMain,
       controller: controllerMainPage,
       beforeRender: beforeRenderSearch,
+      startPage: false,
+    },
+    {
+      pathname: '/saved.html',
+      model: modelMain,
+      controller: controllerMainPage,
+      beforeRender: beforeRenderSaved,
       startPage: false,
     },
     {
