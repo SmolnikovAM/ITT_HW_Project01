@@ -24,6 +24,7 @@ class Application {
       if (model.storage) {
         model.storage._router = router;
       }
+      // eslint-disable-next-line
       route.render = () =>
         view.createRenderFunction({ model, controller })(pathname);
       controller.methods._route = router.startRouting(view);
