@@ -94,6 +94,12 @@ function parseText(text) {
 }
 
 const methods = {
+  loginLooseFocus() {
+    const { data } = this._model;
+    data.loginPanel.showLoginPanel = false;
+    data.registerPanel.showRegisterPanel = false;
+    this._router.refresh();
+  },
   startAuth() {
     const { data } = this._model;
     data.loginPanel.showLoginPanel = true;
@@ -252,7 +258,9 @@ const methods = {
     const updateArticle = { id, title, img, text: textObj };
 
     mainData.news = [...articles, updateArticle].sort((a, b) => a.id - b.id);
-
+    data.editNews.title = '';
+    data.editNews.text = '';
+    data.editNews.img = '';
     this._router.refresh();
   },
 
@@ -741,8 +749,9 @@ const beforeRenderAdmin = (model, cb) => {
 };
 
 function MAIN() {
+  const applicationVersion = '1.0.2';
   // eslint-disable-next-line
-  const storage = new Storage(storageData);
+  const storage = new Storage(storageData, applicationVersion);
   // eslint-disable-next-line
   const view = new View();
 
@@ -825,8 +834,13 @@ function MAIN() {
   ]);
 
   // eslint-disable-next-line
-  const app = new Application({ view, router, beginFromStartPage: true });
-  window.app = app;
+  const app = new Application({
+    view,
+    router,
+    beginFromStartPage: true,
+    version: applicationVersion,
+  });
+  // window.app = app;
 }
 
 window.addEventListener('DOMContentLoaded', MAIN);

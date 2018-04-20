@@ -58,11 +58,12 @@
 </script>
 
 <script type="text/template" id="template_login">
-    <form onSubmit="return false">
+    <div id="remove">
+    <form @blurout="loginLooseFocus">
         <div class="sign form">
             <div>
-                <label>Username</label>
-                <input type="text" minlength="3" name="username" model="loginPanel.login"/>
+               <label>Username</label>
+               <input type="text" minlength="3" name="username" model="loginPanel.login"/>
             </div>
             <div>
                 <label>Password</label>
@@ -76,11 +77,13 @@
             </div>
         </div>
     </form>
+    </div>
 </script>
 
 
 <script type="text/template" id="template_register">
-    <form onSubmit="return false">
+    <div id="remove">
+    <form @blurout="loginLooseFocus">
         <div class="register form">
             <div>
                 <label>Username</label>
@@ -112,7 +115,7 @@
             </div>
         </div>
     </form>
-
+</div>
 </script>
 
 

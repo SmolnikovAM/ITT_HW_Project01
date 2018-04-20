@@ -30,7 +30,7 @@
                     <div class="shop-main" style="flex-direction: column;">
                         <component foreach page="show-shop-iterate" data="savedList"></component>
                     </div>
-    
+                    <div foreach data="savedList"> {{ id }}  </div>
                     <component page="right-form"></component>
                 </div>
             </main>

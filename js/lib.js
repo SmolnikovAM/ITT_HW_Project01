@@ -1,13 +1,15 @@
 // ----------------------------
 // ------APPLICATION-----------
 // ----------------------------
-const VERSION = '1.0.1';
+
 // eslint-disable-next-line
 class Application {
-  constructor({ view, router, beginFromStartPage }) {
+  constructor({ view, router, beginFromStartPage, version }) {
     let isMainPage = false;
     let startPageRoute;
-
+    this.applicationVersion = version;
+    this.libraryVersion = '1.0.1';
+    view._app = this;
     this.router = router;
     router.routerMap.forEach(route => {
       const { model, controller, pathname, startPage } = route;
@@ -81,7 +83,7 @@ class View {
       main,
       appId,
     };
-
+    console.log(this);
     this.DOMreferences = {};
     this.options.idPattrnRegExp = new RegExp(this.options.idPattrn);
     if (appId) {
@@ -89,6 +91,22 @@ class View {
     } else {
       this.HTMLRoot = document.querySelector(main);
     }
+
+    this.looseFocusArray = [];
+
+    document.addEventListener(
+      'click',
+      e => {
+        // console.log(window.location.href);
+        if (!this._app.router.startUpdating) {
+          const path = Array.from(e.path);
+          this.looseFocusArray.forEach(({ element, func }) => {
+            if (path.indexOf(element) === -1) func();
+          });
+        }
+      },
+      true,
+    );
 
     if (!this.HTMLRoot) {
       this.HTMLRoot = document.createElement('div');
@@ -160,6 +178,7 @@ class View {
         const attName = el.attributes[key].name;
         const param = el.attributes[key].value;
 
+        // changed elements
         if (attName.indexOf(':') >= 0) {
           const newKey = attName.replace(':', '');
           let newVal;
@@ -177,9 +196,11 @@ class View {
           }
         }
 
+        // prevent default
         if (attName === 'prevent-default') preventDefaultFlag = true;
         if (attName === 'outside') outsideLink = true;
 
+        // working with model
         if (
           (el.tagName === 'INPUT' ||
             el.tagName === 'TEXTAREA' ||
@@ -208,7 +229,13 @@ class View {
         }
 
         // click atribute
-
+        if (attName.indexOf('@blurout') >= 0) {
+          const paramName = el.attributes[key].value;
+          this.looseFocusArray.push({
+            element: el,
+            func: () => methods[paramName](),
+          });
+        }
         if (
           attName.indexOf('@click') >= 0 ||
           attName.indexOf('@keydown') >= 0
@@ -236,12 +263,16 @@ class View {
             if (!Reflect.has(methods, paramName)) {
               throw new Error(`No such method ${paramName}`);
             }
-            el.addEventListener('click', e => {
-              if (preventDefaultFlag) {
-                e.preventDefault();
-              }
-              methods[paramName](e);
-            });
+            el.addEventListener(
+              eventMethod,
+              e => {
+                if (preventDefaultFlag) {
+                  e.preventDefault();
+                }
+                methods[paramName](e);
+              },
+              // true,
+            );
           }
         }
       });
@@ -284,55 +315,73 @@ class View {
     }
   }
 
-  deepParamChange(element, data, methods) {
-    const recChange = (el, tmp = []) => {
+  deepParamChange(element, data, methods, tmpIn = []) {
+    const recChange = (el, tmp) => {
       if (tmp.indexOf(el) >= 0) return;
       tmp.push(el);
-      // console.log(el);
-
-      this.modifyElementNode({ el, data, methods });
-      this.modifyTextNode({ el, data });
-
-      if (el.childNodes)
-        Array.from(el.childNodes).forEach(child => recChange(child, tmp));
-
-      if (el.tagName === 'COMPONENT') {
-        const dataChild = el.attributes.data
+      let goInside = true;
+      let dataChild = data;
+      const isObjectAtrr =
+        typeof el.attributes === 'object' && el.attributes !== null;
+      if (isObjectAtrr && Reflect.has(el.attributes, 'data')) {
+        dataChild = el.attributes.data
           ? this.value(data, el.attributes.data.value)
           : data;
-        const page = el.attributes.page.value;
-        let goInside = true;
-        if (Reflect.has(el.attributes, 'if')) {
-          const modif = this.value(data, el.attributes.if.value);
-          // console.log(el.attributes.if.value, modif);
-          if (modif === undefined)
-            throw new Error(`No such field in data ${el.attributes.if.value}`);
-          goInside = modif;
-        }
+      }
 
-        if (goInside) {
-          if (Reflect.has(el.attributes, 'foreach')) {
-            Object.keys(dataChild).forEach(key => {
-              const newChild = this.createNodeFromTemplate(
-                page,
-                dataChild[key],
-                methods,
-              );
-              el.parentElement.insertBefore(newChild, el);
-            });
-            el.parentElement.removeChild(el);
-          } else {
+      if (isObjectAtrr && Reflect.has(el.attributes, 'if')) {
+        const modif = this.value(data, el.attributes.if.value);
+        if (modif === undefined)
+          throw new Error(`No such field in data ${el.attributes.if.value}`);
+        goInside = modif;
+      }
+
+      if (!goInside) {
+        el.parentElement.removeChild(el);
+        return;
+      }
+
+      if (isObjectAtrr && Reflect.has(el.attributes, 'foreach')) {
+        if (el.tagName === 'COMPONENT') {
+          const page = el.attributes.page.value;
+          Object.keys(dataChild).forEach(key => {
             const newChild = this.createNodeFromTemplate(
               page,
-              dataChild,
+              dataChild[key],
               methods,
             );
-            el.parentElement.replaceChild(newChild, el);
-          }
+            el.parentElement.insertBefore(newChild, el);
+          });
+          el.parentElement.removeChild(el);
+        } else {
+          el.removeAttribute('foreach');
+          el.removeAttribute('data');
+          Object.keys(dataChild).forEach(key => {
+            const newChild = el.cloneNode(true);
+            this.deepParamChange(newChild, dataChild[key], methods, tmp);
+            el.parentElement.insertBefore(newChild, el);
+          });
+          el.parentElement.removeChild(el);
+        }
+      } else {
+        this.modifyElementNode({ el, data: dataChild, methods });
+        this.modifyTextNode({ el, data: dataChild });
+        if (el.childNodes)
+          Array.from(el.childNodes).forEach(child =>
+            this.deepParamChange(child, dataChild, methods, tmp),
+          );
+        if (el.tagName === 'COMPONENT') {
+          const page = el.attributes.page.value;
+          const newChild = this.createNodeFromTemplate(
+            page,
+            dataChild,
+            methods,
+          );
+          el.parentElement.replaceChild(newChild, el);
         }
       }
     };
-    recChange(element);
+    recChange(element, tmpIn);
   }
 
   createNodeFromTemplate(name, data, methods) {
@@ -346,22 +395,32 @@ class View {
       tag = tag
         .replace('<', '')
         .replace('>', '')
-        .trim();
-      switch (tag) {
-        case 'div':
-          tag = 'div';
-          break;
-        case 'tr':
-          tag = 'tbody';
-          break;
-        default:
-          tag = 'div';
-          break;
+        .trim()
+        .split(' ')[0]
+        .toUpperCase();
+
+      const allowedRootElements = [
+        'DIV',
+        'MAIN',
+        'HEADER',
+        'FORM',
+        'FOOTER',
+        'LI',
+        'UL',
+      ];
+      if (allowedRootElements.indexOf(tag) === -1) {
+        throw new Error(
+          `allowed root elements: ${allowedRootElements.join()}. Page "${name}" tag "${tag}"`,
+        );
       }
       const elem = document.createElement(tag);
+      // console.log(el.sourceHTML);
 
       elem.innerHTML = el.sourceHTML;
-      // console.log(elem);
+      console.log(elem);
+
+      if (elem.childElementCount !== 1)
+        throw new Error(`page "${name}" can have only one root `);
       el.node = elem.firstElementChild;
     }
     // console.log(this.HTMLSource[name]);
@@ -376,6 +435,8 @@ class View {
 
   render({ pageName, model, controller }) {
     this.HTMLRoot.innerHTML = '';
+    this.looseFocusArray = [];
+
     this.appendNodeFromTemplate(
       pageName,
       this.HTMLRoot,
@@ -533,16 +594,17 @@ class Controller {
 
 // eslint-disable-next-line
 class Storage {
-  constructor(inputData) {
+  constructor(inputData, applicationVersion) {
     const mainData = {};
     const _mainData = {};
+    this.applicationVersion = applicationVersion;
 
     // document.addEventListener('DOMContentLoaded', onLoad);
 
     // -----------test mode
-    if (window.localStorage.getItem('version') !== VERSION) {
+    if (window.localStorage.getItem('version') !== this.applicationVersion) {
       window.localStorage.clear();
-      window.localStorage.setItem('version', VERSION);
+      window.localStorage.setItem('version', this.applicationVersion);
     }
     // -----------test mode
 
