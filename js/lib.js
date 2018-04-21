@@ -9,6 +9,7 @@ class Application {
     let startPageRoute;
     this.applicationVersion = version;
     this.libraryVersion = '1.0.1';
+    // eslint-disable-next-line
     view._app = this;
     this.router = router;
     router.routerMap.forEach(route => {
@@ -83,7 +84,7 @@ class View {
       main,
       appId,
     };
-    console.log(this);
+    // console.log(this);
     this.DOMreferences = {};
     this.options.idPattrnRegExp = new RegExp(this.options.idPattrn);
     if (appId) {
@@ -229,20 +230,19 @@ class View {
         }
 
         // click atribute
-        if (attName.indexOf('@blurout') >= 0) {
-          const paramName = el.attributes[key].value;
-          this.looseFocusArray.push({
-            element: el,
-            func: () => methods[paramName](),
-          });
-        }
+        // if (attName.indexOf('@blurout') >= 0) {
+        //   const paramName = el.attributes[key].value;
+        // }
+
         if (
-          attName.indexOf('@click') >= 0 ||
-          attName.indexOf('@keydown') >= 0
+          attName.indexOf('@') >= 0
+          // attName.indexOf('@click') >= 0 ||
+          // attName.indexOf('@keydown') >= 0
         ) {
           const eventMethod = attName.replace('@', '').trim();
           const paramName = el.attributes[key].value;
           const idx = paramName.indexOf('(');
+
           if (idx >= 0) {
             const methodName = paramName.slice(0, idx);
             const params = paramName
@@ -250,29 +250,42 @@ class View {
               .replace(/[()\s]+/g, '')
               .split(',');
 
-            el.addEventListener(eventMethod, e => {
-              if (preventDefaultFlag) e.preventDefault();
-              setTimeout(() => {
-                const evalParams = params.map(p => this.value(data, p));
+            if (!Reflect.has(methods, methodName)) {
+              throw new Error(`No such method ${methodName}`);
+            }
+            const funcToEval = e => {
+              const evalParams = params.map(p => this.value(data, p));
+              methods[methodName](...evalParams, e);
+            };
 
-                methods[methodName](...evalParams, e);
-              }, 0);
-            });
+            if (eventMethod !== 'blurout') {
+              el.addEventListener(eventMethod, e => {
+                if (preventDefaultFlag) e.preventDefault();
+                setTimeout(() => funcToEval(e), 0);
+              });
+            } else {
+              this.looseFocusArray.push({
+                element: el,
+                func: funcToEval,
+              });
+            }
           } else {
-            // console.log(methods);
             if (!Reflect.has(methods, paramName)) {
               throw new Error(`No such method ${paramName}`);
             }
-            el.addEventListener(
-              eventMethod,
-              e => {
+            if (eventMethod !== 'blurout') {
+              el.addEventListener(eventMethod, e => {
                 if (preventDefaultFlag) {
                   e.preventDefault();
                 }
                 methods[paramName](e);
-              },
-              // true,
-            );
+              });
+            } else {
+              this.looseFocusArray.push({
+                element: el,
+                func: () => methods[paramName](),
+              });
+            }
           }
         }
       });
@@ -315,11 +328,31 @@ class View {
     }
   }
 
-  deepParamChange(element, data, methods, tmpIn = []) {
+  deepParamChange(
+    element,
+    data,
+    methods,
+    tmpIn = [],
+    optionsIn = {
+      ifStart: false,
+      ifBool: false,
+      idEl: 0,
+      ifStartId: 0,
+    },
+  ) {
     const recChange = (el, tmp) => {
+      const defaultOptions = () => ({
+        ifStart: false,
+        ifBool: false,
+        idEl: 0,
+        ifStartId: 0,
+      });
+      const optionsForNodesIn = optionsIn;
+      if (el.nodeType !== 3) {
+        optionsForNodesIn.idEl += 1;
+      }
       if (tmp.indexOf(el) >= 0) return;
       tmp.push(el);
-      let goInside = true;
       let dataChild = data;
       const isObjectAtrr =
         typeof el.attributes === 'object' && el.attributes !== null;
@@ -329,11 +362,26 @@ class View {
           : data;
       }
 
+      let goInside = true;
       if (isObjectAtrr && Reflect.has(el.attributes, 'if')) {
+        optionsForNodesIn.ifStart = true;
+        optionsForNodesIn.ifStartId = optionsForNodesIn.idEl;
         const modif = this.value(data, el.attributes.if.value);
         if (modif === undefined)
           throw new Error(`No such field in data ${el.attributes.if.value}`);
-        goInside = modif;
+        optionsForNodesIn.ifBool = modif;
+        goInside = optionsForNodesIn.ifBool;
+      }
+
+      if (isObjectAtrr && Reflect.has(el.attributes, 'else')) {
+        if (!optionsForNodesIn.ifStart)
+          throw new Error('expected if-node first statement in template');
+        if (optionsForNodesIn.ifStartId !== optionsForNodesIn.idEl - 1)
+          throw new Error('expected else-node after if statement in template');
+        optionsForNodesIn.ifStart = false;
+        if (optionsForNodesIn.ifBool) {
+          goInside = false;
+        }
       }
 
       if (!goInside) {
@@ -356,9 +404,16 @@ class View {
         } else {
           el.removeAttribute('foreach');
           el.removeAttribute('data');
+          const optionsForNodes = defaultOptions();
           Object.keys(dataChild).forEach(key => {
             const newChild = el.cloneNode(true);
-            this.deepParamChange(newChild, dataChild[key], methods, tmp);
+            this.deepParamChange(
+              newChild,
+              dataChild[key],
+              methods,
+              tmp,
+              optionsForNodes,
+            );
             el.parentElement.insertBefore(newChild, el);
           });
           el.parentElement.removeChild(el);
@@ -366,10 +421,18 @@ class View {
       } else {
         this.modifyElementNode({ el, data: dataChild, methods });
         this.modifyTextNode({ el, data: dataChild });
-        if (el.childNodes)
+        if (el.childNodes) {
+          const optionsForNodes = defaultOptions();
           Array.from(el.childNodes).forEach(child =>
-            this.deepParamChange(child, dataChild, methods, tmp),
+            this.deepParamChange(
+              child,
+              dataChild,
+              methods,
+              tmp,
+              optionsForNodes,
+            ),
           );
+        }
         if (el.tagName === 'COMPONENT') {
           const page = el.attributes.page.value;
           const newChild = this.createNodeFromTemplate(
@@ -403,7 +466,7 @@ class View {
         'DIV',
         'MAIN',
         'HEADER',
-        'FORM',
+        // 'FORM',
         'FOOTER',
         'LI',
         'UL',
@@ -417,7 +480,7 @@ class View {
       // console.log(el.sourceHTML);
 
       elem.innerHTML = el.sourceHTML;
-      console.log(elem);
+      // console.log(elem);
 
       if (elem.childElementCount !== 1)
         throw new Error(`page "${name}" can have only one root `);

@@ -209,10 +209,14 @@
 
 <script type="text/template" id="template_userform">
     <div class="userinput">
-        <div if="mainData.auth.notAuth"><a href="#" @click="startAuth">Вход</a></div>
-        <div if="mainData.auth.notAuth"><a href="#" @click="startRegister">Регистрация</a></div>
-        <div if="mainData.auth.isAuth"><a href="#" @click="logout">Изход</a></div>
-        <div if="mainData.auth.isAdmin"><a href="admin/admin-news.html">Админ</a></div>
+        <div if="mainData.auth.notAuth">
+           <a href="" @click="startAuth">Вход</a>
+           <a href="" @click="startRegister">Регистрация</a>
+        </div>
+        <div else>
+           <a href="" @click="logout">Изход</a>
+           <a if="mainData.auth.isAdmin" href="admin/admin-news.html">Админ</a>
+        </div>
     </div>
 </script>
 

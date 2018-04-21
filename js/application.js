@@ -543,17 +543,15 @@ const methods = {
   showContent(id, { target }) {
     const { DOMreferences } = this._view;
     const el = DOMreferences[`news-${id}`];
-    if (el.classList.contains('hideContent')) {
+    if (!el.classList.contains('showContent')) {
       // eslint-disable-next-line
       target.textContent = 'Show less...';
-      el.classList.add('show');
-      el.classList.remove('hideContent');
+      el.classList.add('showContent');
     } else {
-      console.log('hide');
+      // console.log('hide');
       // eslint-disable-next-line
       target.textContent = 'Show more...';
-      el.classList.remove('show');
-      el.classList.add('hideContent');
+      el.classList.remove('showContent');
     }
   },
   savePhone(id) {
