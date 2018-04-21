@@ -765,6 +765,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderMain,
       startPage: true,
+      title: 'Начало'
     },
     {
       pathname: '/search.html',
@@ -772,6 +773,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderSearch,
       startPage: false,
+      title: 'search'
     },
     {
       pathname: '/saved.html',
@@ -779,6 +781,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderSaved,
       startPage: false,
+      title: 'saved'
     },
     {
       pathname: '/review.html',
@@ -786,6 +789,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderReview,
       startPage: false,
+      title: 'review'
     },
     {
       pathname: '/shop.html',
@@ -793,6 +797,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderShop,
       startPage: false,
+      title: 'shop'
     },
     {
       pathname: '/news.html',
@@ -800,6 +805,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderNews,
       startPage: false,
+      title: 'news'
     },
     {
       pathname: '/admin/admin.html',
@@ -807,6 +813,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderAdmin,
       startPage: false,
+      title: 'admin'
     },
     {
       pathname: '/admin/admin-news.html',
@@ -814,6 +821,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderAdmin,
       startPage: false,
+      title: 'admin'
     },
     {
       pathname: '/admin/admin-review.html',
@@ -821,6 +829,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderAdmin,
       startPage: false,
+      title: 'admin'
     },
     {
       pathname: '/admin/admin-shop.html',
@@ -828,6 +837,7 @@ function MAIN() {
       controller: controllerMainPage,
       beforeRender: beforeRenderAdmin,
       startPage: false,
+      title: 'admin'
     },
   ]);
 

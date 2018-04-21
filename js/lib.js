@@ -526,10 +526,11 @@ class Router {
     this.currentPage = '';
     this.startUpdating = false;
     this.routerMap = routerMap.map(
-      ({ pathname, model, startPage, controller, beforeRender }) => ({
+      ({ pathname, model, startPage, controller, beforeRender ,title}) => ({
         pathname,
         model,
         controller,
+        title,
         startPage: Boolean(startPage),
         render: () => {},
         beforeRender:
@@ -605,6 +606,7 @@ class Router {
         this.currentPage = href;
         page.render();
         // console.log('render');
+        window.document.title = page.title;
         this.startUpdating = false;
         callback();
       };
